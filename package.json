@@ -7,8 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier-lint": "prettier --check .",
+    "prettier-format": "prettier --write .",
     "fake-api": "json-server --watch questions.json --port 8080",
     "postinstall": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*": "prettier --write"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.5",
@@ -36,6 +46,7 @@
   },
   "devDependencies": {
     "husky": "^8.0.3",
-    "json-server": "^0.17.3"
+    "json-server": "^0.17.3",
+    "lint-staged": "^13.2.2"
   }
 }
