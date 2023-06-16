@@ -1,6 +1,7 @@
 type Options = {
   option_id: number
   option_title: string
+  option_letter: string
 }
 
 type Option = {

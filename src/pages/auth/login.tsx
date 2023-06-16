@@ -7,12 +7,15 @@ import {
   FormControl,
   FormLabel,
   Button,
+  useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 const LoginPage = () => {
   const { register, handleSubmit } = useForm()
   const router = useRouter()
+
+  const toast = useToast({ duration: 3000, isClosable: true, position: 'top' })
 
   const submit = async (data: any) => {
     try {
@@ -25,6 +28,10 @@ const LoginPage = () => {
 
       if (login?.ok) {
         router.replace(login.url!)
+      } else {
+        if (login?.status === 401) {
+          toast({ title: 'E-mail ou senha incorretos', status: 'error' })
+        }
       }
     } catch (error) {
       console.log(error)

@@ -17,7 +17,7 @@ import Question from 'components/Question'
 import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from 'services'
 import { fetcherQuestions } from 'services/queries/questions'
 import useSWR from 'swr'
@@ -30,8 +30,9 @@ type Options = {
 const Prova = () => {
   const router = useRouter()
   const { data: session } = useSession()
+  const [uuid, setUuid] = useState<string>('')
   const { data, error, isLoading } = useSWR(
-    `prova/${router.query.uuid}`,
+    uuid ? `questions/${uuid}` : null,
     fetcherQuestions
   )
 
@@ -40,7 +41,15 @@ const Prova = () => {
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState<number>(0)
+
+  useEffect(() => {
+    if (router) {
+      if (typeof router.query.uuid === 'string') {
+        setUuid(router.query.uuid)
+      }
+    }
+  }, [router])
 
   const handleNextClickChange = () => {
     if (data?.questions.length === tabIndex + 1) return

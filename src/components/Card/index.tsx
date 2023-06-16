@@ -18,15 +18,24 @@ const BaseCard = ({
   return (
     <Card>
       <CardHeader>
-        <Heading size={'md'} color={'mainBlue.700'}>
+        <Heading size={'md'} color={'mainBlue.700'} textTransform={'uppercase'}>
           {cardTitle}
         </Heading>
       </CardHeader>
       <CardBody>{children}</CardBody>
       <CardFooter>
-        <Button as={Link} href={cardButtonLink} colorScheme={'blue'}>
-          {cardButtonTitle}
-        </Button>
+        {cardButtonLink && cardButtonTitle ? (
+          <Button
+            as={Link}
+            href={cardButtonLink}
+            colorScheme={'blue'}
+            variant={'outline'}
+          >
+            {cardButtonTitle}
+          </Button>
+        ) : (
+          <></>
+        )}
       </CardFooter>
     </Card>
   )

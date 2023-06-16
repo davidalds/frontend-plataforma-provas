@@ -62,14 +62,17 @@ const Question = ({
         </Box>
         <RadioGroup onChange={handleOptionChange} value={optionValue}>
           <VStack align={'baseline'}>
-            {options.map(({ option_id, option_title }) => (
+            {options.map(({ option_id, option_title, option_letter }) => (
               <Radio
                 colorScheme={'green'}
                 size={'lg'}
                 key={option_id}
                 value={`${option_id}`}
               >
-                {option_title}
+                <Text fontWeight={'bold'} mr={1} display={'inline-block'}>
+                  {option_letter + ')'}
+                </Text>
+                <Text display={'inline-block'}>{option_title}</Text>
               </Radio>
             ))}
           </VStack>

@@ -15,6 +15,7 @@ declare module 'next-auth' {
       uuid: string
       username: string
       accessToken: string
+      user_type: number
     }
     accessToken: string
   }

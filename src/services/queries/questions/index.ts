@@ -7,6 +7,7 @@ type QuestionData = {
   options: {
     option_id: number
     option_title: string
+    option_letter: string
   }[]
 }
 

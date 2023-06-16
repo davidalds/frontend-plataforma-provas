@@ -6,6 +6,7 @@ import { getSession } from 'next-auth/react'
 type tokenType = {
   uuid: string
   username: string
+  user_type: number
   exp: number
 }
 

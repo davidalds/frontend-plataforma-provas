@@ -1,26 +1,25 @@
-import {
-  Divider,
-  HStack,
-  Heading,
-  SimpleGrid,
-  Spinner,
-  VStack,
-} from '@chakra-ui/react'
-import BaseCard from 'components/Card'
+import { Spinner, VStack } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { fetcherProvas } from 'services/queries/provas'
 import useSWR from 'swr'
 import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
+import ParticipantHome from 'components/ParticipantHome'
+import CreatorHome from 'components/CreatorHome'
 
 export default function Home() {
   const { data: session } = useSession()
-  const { data, error, isLoading } = useSWR(
-    session ? `provas/${session.user.uuid}` : null,
-    fetcherProvas
-  )
-  const { data: data2 } = useSWR(
-    session ? `provas/${session.user.uuid}?done=true` : null,
+  const {
+    data: openProvas,
+    error,
+    isLoading,
+  } = useSWR(session ? `provas/${session.user.uuid}` : null, fetcherProvas)
+  const { data: closedProvas } = useSWR(
+    session
+      ? session.user.user_type === 2
+        ? `provas/${session.user.uuid}?done=true`
+        : null
+      : null,
     fetcherProvas
   )
 
@@ -32,53 +31,10 @@ export default function Home() {
             <VStack>
               <Spinner size={'lg'} />
             </VStack>
+          ) : session?.user.user_type === 1 ? (
+            <CreatorHome data={openProvas} />
           ) : (
-            <>
-              <HStack p={4} w={'100%'}>
-                <Heading
-                  size={'lg'}
-                  color={'mainBlue.600'}
-                  fontWeight={'medium'}
-                >
-                  Provas em aberto
-                </Heading>
-              </HStack>
-              <Divider />
-              <SimpleGrid p={4} columns={[1, 2, 3]} spacing={'40px'}>
-                {data?.provas.map(({ prova_id, uuid, title, description }) => (
-                  <BaseCard
-                    key={prova_id}
-                    cardTitle={title}
-                    cardButtonLink={`prova/${uuid}`}
-                    cardButtonTitle={'Acessar prova'}
-                  >
-                    {description}
-                  </BaseCard>
-                ))}
-              </SimpleGrid>
-              <HStack p={4} w={'100%'}>
-                <Heading
-                  size={'lg'}
-                  color={'mainBlue.600'}
-                  fontWeight={'medium'}
-                >
-                  Provas finalizadas
-                </Heading>
-              </HStack>
-              <Divider />
-              <SimpleGrid p={4} columns={[1, 2, 3]} spacing={'40px'}>
-                {data2?.provas.map(({ prova_id, title, description, uuid }) => (
-                  <BaseCard
-                    key={prova_id}
-                    cardTitle={title}
-                    cardButtonLink={`prova/score/${uuid}`}
-                    cardButtonTitle={'Visualizar nota'}
-                  >
-                    {description}
-                  </BaseCard>
-                ))}
-              </SimpleGrid>
-            </>
+            <ParticipantHome data={openProvas} data2={closedProvas} />
           )}
         </Layout>
       </RequireAuth>
