@@ -19,7 +19,7 @@ const ModalListCandidatos: ForwardRefRenderFunction<
   IPropsModalListCandidatos
 > = ({ onClose, isOpen, uuidUser, uuidProva, linkUsersInProva }, ref) => {
   const [offset, setOffset] = useState<number>(0)
-  const limit = 1
+  const limit = 8
 
   const {
     data,
