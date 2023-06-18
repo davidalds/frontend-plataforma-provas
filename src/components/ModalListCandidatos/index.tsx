@@ -13,6 +13,7 @@ import useSWR from 'swr'
 import { IPropsModalListCandidatos } from './interfaces/modalListCandidatos'
 import { useToastHook } from 'hooks/useToast'
 import Pagination from 'components/Pagination'
+import AlertComponent from 'components/Alert'
 
 const ModalListCandidatos: ForwardRefRenderFunction<
   any,
@@ -79,22 +80,29 @@ const ModalListCandidatos: ForwardRefRenderFunction<
       modalSize={'4xl'}
       linkUsers={sendUsersArr}
     >
-      <TableContainer>
-        <TableBase headers={['Selecione', 'Nome de Usuário', 'E-mail']}>
-          {data?.users.map(({ username, email, uuid }) => (
-            <Tr key={uuid}>
-              <Td>
-                <Checkbox
-                  defaultChecked={uuidUsers.includes(uuid)}
-                  colorScheme={'blue'}
-                  onChange={() => handleCheckUsers(uuid)}
-                />
-              </Td>
-              <Td>{username}</Td>
-              <Td>{email}</Td>
-            </Tr>
-          ))}
-        </TableBase>
+      <TableContainer overflowY={'auto'} maxH={'400px'} minH={'400px'}>
+        {data?.users.length === 0 && !error ? (
+          <AlertComponent
+            title={'Não existem candidatos para serem vinculados'}
+            statusType={'info'}
+          />
+        ) : (
+          <TableBase headers={['Selecione', 'Nome de Usuário', 'E-mail']}>
+            {data?.users.map(({ username, email, uuid }) => (
+              <Tr key={uuid}>
+                <Td>
+                  <Checkbox
+                    defaultChecked={uuidUsers.includes(uuid)}
+                    colorScheme={'blue'}
+                    onChange={() => handleCheckUsers(uuid)}
+                  />
+                </Td>
+                <Td>{username}</Td>
+                <Td>{email}</Td>
+              </Tr>
+            ))}
+          </TableBase>
+        )}
       </TableContainer>
       {data?.total_users ? (
         <Pagination

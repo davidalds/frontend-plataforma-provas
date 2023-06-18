@@ -10,6 +10,7 @@ import BaseCard from 'components/Card'
 import Link from 'next/link'
 import { IoIosAdd } from 'react-icons/io'
 import { ProvaResponse } from 'services/queries/provas'
+import { AiOutlineFileSearch } from 'react-icons/ai'
 
 interface IPropsParticipantHome {
   data: ProvaResponse | undefined
@@ -39,6 +40,7 @@ const CreatorHome = ({ data }: IPropsParticipantHome) => {
             cardTitle={title}
             cardButtonLink={`prova/info/${uuid}`}
             cardButtonTitle={'Visualizar informações'}
+            cardButtonIcon={AiOutlineFileSearch}
           >
             {description}
           </BaseCard>

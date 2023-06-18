@@ -5,7 +5,7 @@ const AlertComponent = ({ title, statusType }: IPropsAlert) => {
   return (
     <Alert
       status={statusType}
-      variant="subtle"
+      variant="left-accent"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"

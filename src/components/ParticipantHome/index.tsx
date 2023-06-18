@@ -1,6 +1,8 @@
 import { Divider, HStack, Heading, SimpleGrid } from '@chakra-ui/react'
 import BaseCard from 'components/Card'
 import { ProvaResponse } from 'services/queries/provas'
+import { AiOutlineProfile } from 'react-icons/ai'
+import { BsClipboardData } from 'react-icons/bs'
 
 interface IPropsParticipantHome {
   data: ProvaResponse | undefined
@@ -23,6 +25,7 @@ const ParticipantHome = ({ data, data2 }: IPropsParticipantHome) => {
             cardTitle={title}
             cardButtonLink={`prova/${uuid}`}
             cardButtonTitle={'Acessar prova'}
+            cardButtonIcon={AiOutlineProfile}
           >
             {description}
           </BaseCard>
@@ -41,6 +44,7 @@ const ParticipantHome = ({ data, data2 }: IPropsParticipantHome) => {
             cardTitle={title}
             cardButtonLink={`prova/score/${uuid}`}
             cardButtonTitle={'Visualizar nota'}
+            cardButtonIcon={BsClipboardData}
           >
             {description}
           </BaseCard>

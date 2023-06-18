@@ -34,6 +34,7 @@ import { useForm } from 'react-hook-form'
 import { FormProvaInfo } from 'types/provaInfoTypes'
 import { AiOutlineOrderedList } from 'react-icons/ai'
 import HeaderProvaInfo from 'components/HeaderProvaInfo'
+import CandidatoCard from 'components/CandidatoCard'
 
 type ModalRefType = {
   mutateListUsersCandidato: KeyedMutator<UsersCandidatoResponse>
@@ -229,32 +230,17 @@ const ProvaInfo = () => {
               <Stack
                 direction={'column'}
                 mt={4}
-                resize={'vertical'}
                 spacing={1}
+                overflowY={'auto'}
+                maxH={'100vh'}
               >
                 {data?.users.map(({ username, email, uuid }) => (
-                  <HStack
+                  <CandidatoCard
                     key={uuid}
-                    justifyContent={'space-between'}
-                    boxShadow={'lg'}
-                    p={2}
-                    rounded={'md'}
-                  >
-                    <Flex alignItems={'center'}>
-                      <Avatar size={'sm'} />
-                      <Box ml={3}>
-                        <Text fontWeight={'bold'}>{username}</Text>
-                        <Text>{email}</Text>
-                      </Box>
-                    </Flex>
-                    <IconButton
-                      onClick={() => deslinkUsersInProva(uuid)}
-                      aria-label="desvincular"
-                      colorScheme={'red'}
-                      size={'sm'}
-                      icon={<Icon as={AiOutlineMinus} />}
-                    />
-                  </HStack>
+                    username={username}
+                    email={email}
+                    deslinkUser={() => deslinkUsersInProva(uuid)}
+                  />
                 ))}
               </Stack>
             </GridItem>
