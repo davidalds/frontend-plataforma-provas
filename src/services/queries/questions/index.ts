@@ -11,10 +11,22 @@ type QuestionData = {
   }[]
 }
 
+type QuestionDataFeedback = {
+  question_id: number
+  question_title: string
+  peso: number
+  options: {
+    option_id: number
+    option_title: string
+    option_letter: string
+    iscorrect: boolean
+  }[]
+}
+
 type QuestionResponse = {
   prova_id: number
   prova_title: string
-  questions: QuestionData[]
+  questions: QuestionData[] | QuestionDataFeedback[]
 }
 
 const fetcherQuestions = async (url: string): Promise<QuestionResponse> => {
@@ -22,4 +34,11 @@ const fetcherQuestions = async (url: string): Promise<QuestionResponse> => {
   return res.data
 }
 
-export { fetcherQuestions }
+const fetcherQuestionsFeedback = async (
+  url: string
+): Promise<QuestionResponse> => {
+  const res = await api.get(url)
+  return res.data
+}
+
+export { fetcherQuestions, fetcherQuestionsFeedback }

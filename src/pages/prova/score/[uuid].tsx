@@ -1,14 +1,17 @@
 import {
   Box,
+  Button,
   Flex,
   HStack,
   Heading,
   Stack,
   StackDivider,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react'
 import BaseCard from 'components/Card'
 import Layout from 'components/Layout'
+import ModalFeedbackQuestions from 'components/ModalFeedbackQuestions'
 import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -18,6 +21,7 @@ import useSWR from 'swr'
 const ProvaScore = () => {
   const { data: session } = useSession()
   const router = useRouter()
+  const { isOpen, onClose, onOpen } = useDisclosure()
   const { data, error, isLoading } = useSWR(
     session ? `prova/score/${router.query.uuid}/${session?.user.uuid}` : null,
     fetcherProvaScore
@@ -26,6 +30,11 @@ const ProvaScore = () => {
   return (
     <RequireAuth>
       <Layout title="Prova">
+        <ModalFeedbackQuestions
+          uuidProva={router.query.uuid ? router.query.uuid : ''}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
         <Box m={4}>
           {data ? (
             <BaseCard cardTitle={data?.prova_title}>
@@ -86,6 +95,17 @@ const ProvaScore = () => {
                   </HStack>
                 </Box>
               </Stack>
+              <Box mt={4}>
+                <Button
+                  colorScheme={'blue'}
+                  size={'lg'}
+                  w={'100%'}
+                  variant={'outline'}
+                  onClick={onOpen}
+                >
+                  Visualizar Gabarito de Questões
+                </Button>
+              </Box>
             </BaseCard>
           ) : (
             <></>

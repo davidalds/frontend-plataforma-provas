@@ -2,6 +2,7 @@ type Options = {
   option_id: number
   option_title: string
   option_letter: string
+  iscorrect?: boolean
 }
 
 type Option = {
@@ -15,7 +16,8 @@ interface IPropsQuestion {
   title: string
   peso: number
   options: Options[]
-  addOption: (e: Option) => void
+  addOption?: (e: Option) => void
+  isFeedback?: boolean
 }
 
 export type { IPropsQuestion }

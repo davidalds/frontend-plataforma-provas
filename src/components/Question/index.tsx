@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { IPropsQuestion } from './interfaces/question'
 import { useState } from 'react'
+import OptionRadio from 'components/OptionRadioQuestion'
 
 const Question = ({
   ind,
@@ -20,11 +21,12 @@ const Question = ({
   peso,
   options,
   addOption,
+  isFeedback = false,
 }: IPropsQuestion) => {
   const [optionValue, setOptionValue] = useState<string>('0')
 
   const handleOptionChange = (optionParam: string) => {
-    if (optionParam) {
+    if (optionParam && addOption) {
       setOptionValue(optionParam)
       const option = {
         option_question_id: idQuestion,
@@ -57,26 +59,38 @@ const Question = ({
         <Divider />
         <Box py={2}>
           <Text fontSize={'lg'} fontWeight={'bold'}>
-            Marque a alternativa correta
+            {isFeedback ? 'Respostas' : 'Marque a alternativa correta'}
           </Text>
         </Box>
-        <RadioGroup onChange={handleOptionChange} value={optionValue}>
+        {!isFeedback ? (
+          <RadioGroup onChange={handleOptionChange} value={optionValue}>
+            <VStack align={'baseline'}>
+              {options.map(({ option_id, option_title, option_letter }) => (
+                <OptionRadio
+                  key={option_id}
+                  option_id={option_id}
+                  option_title={option_title}
+                  option_letter={option_letter}
+                />
+              ))}
+            </VStack>
+          </RadioGroup>
+        ) : (
           <VStack align={'baseline'}>
-            {options.map(({ option_id, option_title, option_letter }) => (
-              <Radio
-                colorScheme={'green'}
-                size={'lg'}
-                key={option_id}
-                value={`${option_id}`}
-              >
-                <Text fontWeight={'bold'} mr={1} display={'inline-block'}>
-                  {option_letter + ')'}
-                </Text>
-                <Text display={'inline-block'}>{option_title}</Text>
-              </Radio>
-            ))}
+            {options.map(
+              ({ option_id, option_title, option_letter, iscorrect }) => (
+                <OptionRadio
+                  key={option_id}
+                  option_id={option_id}
+                  option_title={option_title}
+                  option_letter={option_letter}
+                  checked={iscorrect}
+                  isReadOnly
+                />
+              )
+            )}
           </VStack>
-        </RadioGroup>
+        )}
       </VStack>
     </>
   )
