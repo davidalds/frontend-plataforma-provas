@@ -1,25 +1,30 @@
 import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import {
-  Heading,
-  VStack,
-  Input,
-  FormControl,
-  FormLabel,
-  Button,
-  useToast,
-} from '@chakra-ui/react'
+import { Heading, VStack, Input, Button, useToast, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import WrapFormInput from 'components/Form/WrapFormInput'
+import { yupResolver } from '@hookform/resolvers/yup'
+import schema from 'schemas/loginSchema'
+import { LoginForm } from 'types/loginTypes'
+import { useState } from 'react'
 
 const LoginPage = () => {
-  const { register, handleSubmit } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: yupResolver(schema),
+  })
   const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const toast = useToast({ duration: 3000, isClosable: true, position: 'top' })
 
-  const submit = async (data: any) => {
+  const submit = async (data: LoginForm) => {
     try {
+      setLoading(true)
       const login = await signIn('credentials', {
         email: data.email,
         password: data.password,
@@ -34,29 +39,55 @@ const LoginPage = () => {
           toast({ title: 'E-mail ou senha incorretos', status: 'error' })
         }
       }
+      setLoading(false)
     } catch (error) {
       console.log(error)
+      setLoading(false)
     }
   }
 
   return (
-    <VStack w={'500px'} m={'auto'} as={'form'} onSubmit={handleSubmit(submit)}>
-      <Head>
-        <title>Plataforma Provas - Login</title>
-      </Head>
-      <Heading>Login Page</Heading>
-      <FormControl>
-        <FormLabel>E-mail:</FormLabel>
-        <Input type="email" {...register('email')}></Input>
-      </FormControl>
-      <FormControl>
-        <FormLabel>Senha:</FormLabel>
-        <Input type="password" {...register('password')}></Input>
-      </FormControl>
-      <Button type="submit" colorScheme="blue" w={'100%'}>
-        Entrar
-      </Button>
-    </VStack>
+    <Box
+      minH={'100vh'}
+      w={'100%'}
+      display={'flex'}
+      justifyContent={'center'}
+      alignItems={'center'}
+    >
+      <VStack
+        w={'500px'}
+        as={'form'}
+        onSubmit={handleSubmit(submit)}
+        boxShadow={'md'}
+        p={4}
+        rounded={'lg'}
+      >
+        <Head>
+          <title>Plataforma Provas - Login</title>
+        </Head>
+        <Heading color={'mainBlue.600'}>Plataforma Provas</Heading>
+        <WrapFormInput label="E-mail:" errors={errors.email}>
+          <Input
+            type="email"
+            {...register('email')}
+            placeholder="Insira o e-mail"
+          ></Input>
+        </WrapFormInput>
+        <WrapFormInput label="Senha:" errors={errors.password}>
+          <Input
+            type="password"
+            {...register('password')}
+            placeholder="Insira a senha"
+          ></Input>
+        </WrapFormInput>
+        <Button type="submit" colorScheme="blue" w={'100%'} isLoading={loading}>
+          Entrar
+        </Button>
+        <Button colorScheme="green" w={'100%'} variant={'outline'}>
+          Novo Usuário
+        </Button>
+      </VStack>
+    </Box>
   )
 }
 

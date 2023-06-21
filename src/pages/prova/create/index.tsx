@@ -2,9 +2,9 @@ import React from 'react'
 import Layout from 'components/Layout'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
-import { createProvaForm, question } from './interfaces/createProva'
+import { createProvaForm, question } from './../../../types/createProvaTypes'
 import { yupResolver } from '@hookform/resolvers/yup'
-import schema from './schema/schema'
+import schema from '../../../schemas/createProvaSchema'
 import {
   Button,
   Divider,
