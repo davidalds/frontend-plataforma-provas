@@ -10,6 +10,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const LoginPage = () => {
   const { register, handleSubmit } = useForm()
@@ -40,6 +41,9 @@ const LoginPage = () => {
 
   return (
     <VStack w={'500px'} m={'auto'} as={'form'} onSubmit={handleSubmit(submit)}>
+      <Head>
+        <title>Plataforma Provas - Login</title>
+      </Head>
       <Heading>Login Page</Heading>
       <FormControl>
         <FormLabel>E-mail:</FormLabel>

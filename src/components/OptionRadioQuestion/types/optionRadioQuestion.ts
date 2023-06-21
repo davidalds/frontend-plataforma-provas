@@ -4,4 +4,5 @@ export interface IPropsOptionRadio {
   option_title: string
   isReadOnly?: boolean
   checked?: boolean
+  userMarkedOption?: boolean
 }

@@ -4,7 +4,6 @@ import {
   VStack,
   Divider,
   RadioGroup,
-  Radio,
   Text,
   Badge,
   Spacer,
@@ -22,6 +21,7 @@ const Question = ({
   options,
   addOption,
   isFeedback = false,
+  markedOptionId = 0,
 }: IPropsQuestion) => {
   const [optionValue, setOptionValue] = useState<string>('0')
 
@@ -59,7 +59,7 @@ const Question = ({
         <Divider />
         <Box py={2}>
           <Text fontSize={'lg'} fontWeight={'bold'}>
-            {isFeedback ? 'Respostas' : 'Marque a alternativa correta'}
+            {isFeedback ? 'Resposta correta' : 'Marque a alternativa correta'}
           </Text>
         </Box>
         {!isFeedback ? (
@@ -85,6 +85,7 @@ const Question = ({
                   option_title={option_title}
                   option_letter={option_letter}
                   checked={iscorrect}
+                  userMarkedOption={markedOptionId === option_id}
                   isReadOnly
                 />
               )

@@ -1,4 +1,4 @@
-import { Radio, Text } from '@chakra-ui/react'
+import { HStack, Radio, Text } from '@chakra-ui/react'
 import { IPropsOptionRadio } from './types/optionRadioQuestion'
 
 const OptionRadio = ({
@@ -7,6 +7,7 @@ const OptionRadio = ({
   option_title,
   isReadOnly = false,
   checked = false,
+  userMarkedOption = false,
 }: IPropsOptionRadio) => {
   return (
     <Radio
@@ -16,10 +17,26 @@ const OptionRadio = ({
       isReadOnly={isReadOnly}
       defaultChecked={checked}
     >
-      <Text fontWeight={'bold'} mr={1} display={'inline-block'}>
-        {option_letter + ')'}
-      </Text>
-      <Text display={'inline-block'}>{option_title}</Text>
+      <HStack
+        px={1}
+        bgColor={
+          checked
+            ? 'green.500'
+            : checked !== userMarkedOption
+            ? 'red.500'
+            : 'none'
+        }
+        color={
+          checked ? 'white' : checked !== userMarkedOption ? 'white' : 'none'
+        }
+        rounded={'md'}
+      >
+        <Text fontWeight={'bold'} mr={1}>
+          {option_letter + ')'}
+        </Text>
+        <Text>{option_title}</Text>
+        {userMarkedOption && <Text>- Sua resposta</Text>}
+      </HStack>
     </Radio>
   )
 }

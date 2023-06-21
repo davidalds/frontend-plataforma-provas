@@ -18,6 +18,7 @@ interface IPropsQuestion {
   options: Options[]
   addOption?: (e: Option) => void
   isFeedback?: boolean
+  markedOptionId?: number
 }
 
 export type { IPropsQuestion }

@@ -1,11 +1,4 @@
-import {
-  TabList,
-  Tabs,
-  Tab,
-  useDisclosure,
-  TabPanels,
-  TabPanel,
-} from '@chakra-ui/react'
+import { TabList, Tabs, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 import BaseModal from 'components/Modal'
 import { IPropsModalFeedbackQuestions } from './types/modalFeedbackQuestions'
 import useSWR from 'swr'
@@ -16,9 +9,12 @@ const ModalFeedbackQuestions = ({
   isOpen,
   onClose,
   uuidProva,
+  uuidUser,
 }: IPropsModalFeedbackQuestions) => {
   const { data, error, isLoading } = useSWR(
-    uuidProva ? `questions/feedback/${uuidProva}` : null,
+    uuidProva && uuidUser
+      ? `questions/feedback/${uuidProva}/${uuidUser}`
+      : null,
     fetcherQuestionsFeedback
   )
 
@@ -38,7 +34,16 @@ const ModalFeedbackQuestions = ({
           </TabList>
           <TabPanels>
             {data?.questions.map(
-              ({ question_id, question_title, peso, options }, index) => (
+              (
+                {
+                  question_id,
+                  question_title,
+                  peso,
+                  options,
+                  option_answered_id,
+                },
+                index
+              ) => (
                 <TabPanel key={question_id}>
                   <Question
                     ind={index + 1}
@@ -47,6 +52,7 @@ const ModalFeedbackQuestions = ({
                     peso={peso}
                     options={options}
                     isFeedback={true}
+                    markedOptionId={option_answered_id}
                   />
                 </TabPanel>
               )

@@ -34,6 +34,7 @@ const ProvaScore = () => {
           uuidProva={router.query.uuid ? router.query.uuid : ''}
           isOpen={isOpen}
           onClose={onClose}
+          uuidUser={session ? session?.user.uuid : ''}
         />
         <Box m={4}>
           {data ? (
