@@ -1,10 +1,19 @@
 import {
   ForwardRefRenderFunction,
   forwardRef,
-  useEffect,
   useImperativeHandle,
 } from 'react'
-import { Tr, Td, TableContainer, Checkbox } from '@chakra-ui/react'
+import {
+  Tr,
+  Td,
+  TableContainer,
+  Checkbox,
+  HStack,
+  Input,
+  IconButton,
+  Icon,
+  ButtonGroup,
+} from '@chakra-ui/react'
 import BaseModal from 'components/Modal'
 import TableBase from 'components/Table'
 import { useState } from 'react'
@@ -14,6 +23,10 @@ import { IPropsModalListCandidatos } from './interfaces/modalListCandidatos'
 import { useToastHook } from 'hooks/useToast'
 import Pagination from 'components/Pagination'
 import AlertComponent from 'components/Alert'
+import WrapFormInput from 'components/Form/WrapFormInput'
+import { AiOutlineSearch } from 'react-icons/ai'
+import { FiRefreshCcw } from 'react-icons/fi'
+import { useForm } from 'react-hook-form'
 
 const ModalListCandidatos: ForwardRefRenderFunction<
   any,
@@ -21,7 +34,7 @@ const ModalListCandidatos: ForwardRefRenderFunction<
 > = ({ onClose, isOpen, uuidUser, uuidProva, linkUsersInProva }, ref) => {
   const [offset, setOffset] = useState<number>(0)
   const limit = 8
-
+  const [search, setSearch] = useState<string>('')
   const {
     data,
     error,
@@ -29,10 +42,12 @@ const ModalListCandidatos: ForwardRefRenderFunction<
     mutate: mutateUsersCandidato,
   } = useSWR(
     uuidUser && uuidProva
-      ? `users/${uuidUser}/${uuidProva}?offset=${offset}&limit=${limit}`
+      ? `users/${uuidUser}/${uuidProva}?offset=${offset}&limit=${limit}&search=${search}`
       : null,
     fetcherUsersCandidato
   )
+
+  const { register, handleSubmit, resetField } = useForm<{ email: string }>()
 
   useImperativeHandle(ref, mutateUsersCandidato)
 
@@ -72,6 +87,12 @@ const ModalListCandidatos: ForwardRefRenderFunction<
     })
   }
 
+  const sendSearch = (data: { email: string }) => {
+    if (data.email) {
+      setSearch(data.email)
+    }
+  }
+
   return (
     <BaseModal
       modalTitle={'Lista de Candidatos'}
@@ -80,6 +101,37 @@ const ModalListCandidatos: ForwardRefRenderFunction<
       modalSize={'4xl'}
       linkUsers={sendUsersArr}
     >
+      <HStack
+        justifyContent={'flex-end'}
+        mb={2}
+        as={'form'}
+        onSubmit={handleSubmit(sendSearch)}
+      >
+        <WrapFormInput>
+          <Input
+            type="email"
+            placeholder="Insira o e-mail para pesquisar"
+            {...register('email')}
+          />
+        </WrapFormInput>
+        <ButtonGroup>
+          <IconButton
+            aria-label="Pesquisar"
+            icon={<Icon as={AiOutlineSearch} />}
+            colorScheme={'blue'}
+            type="submit"
+          />
+          <IconButton
+            aria-label="Restaurar"
+            icon={<Icon as={FiRefreshCcw} />}
+            colorScheme={'blue'}
+            onClick={() => {
+              resetField('email')
+              setSearch('')
+            }}
+          />
+        </ButtonGroup>
+      </HStack>
       <TableContainer overflowY={'auto'} maxH={'400px'} minH={'400px'}>
         {data?.users.length === 0 && !error ? (
           <AlertComponent
