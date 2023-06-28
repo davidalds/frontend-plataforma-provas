@@ -1,6 +1,6 @@
-import useAuth from 'context/useAuth'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
+import useAuth from './useAuth'
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {
   const auth = useAuth()

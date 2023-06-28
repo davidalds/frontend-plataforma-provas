@@ -14,13 +14,13 @@ import ConfirmQuestionModal from 'components/ConfirmQuestionsModal'
 import QuestionHeader from 'components/HeaderQuestion'
 import Layout from 'components/Layout'
 import Question from 'components/Question'
-import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import api from 'services'
-import { fetcherQuestions } from 'services/queries/questions'
 import useSWR from 'swr'
+import api from '../../services'
+import RequireAuth from '../../context/RequireAuth'
+import { fetcherQuestions } from '../../services/queries/questions'
 
 type Options = {
   option_question_id: number

@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginPage /> test login inputs 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="css-1t53nb0"
+      >
+        <form
+          class="chakra-stack css-5c4pa"
+        >
+          <h2
+            class="chakra-heading css-13t2rws"
+          >
+            Plataforma Provas
+          </h2>
+          <div
+            class="chakra-form-control css-0"
+            role="group"
+          >
+            <label
+              class="chakra-form__label css-13ih5c7"
+              for="field-:r4:"
+              id="field-:r4:-label"
+            >
+              E-mail:
+            </label>
+            <input
+              class="chakra-input css-0"
+              id="field-:r4:"
+              name="email"
+              placeholder="Insira o e-mail"
+              type="email"
+            />
+          </div>
+          <div
+            class="chakra-form-control css-0"
+            role="group"
+          >
+            <label
+              class="chakra-form__label css-13ih5c7"
+              for="field-:r5:"
+              id="field-:r5:-label"
+            >
+              Senha:
+            </label>
+            <input
+              class="chakra-input css-0"
+              id="field-:r5:"
+              name="password"
+              placeholder="Insira a senha"
+              type="password"
+            />
+          </div>
+          <button
+            class="chakra-button css-uxt1e8"
+            type="submit"
+          >
+            Entrar
+          </button>
+          <button
+            class="chakra-button css-uxt1e8"
+            type="button"
+          >
+            Novo Usuário
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="css-1t53nb0"
+    >
+      <form
+        class="chakra-stack css-5c4pa"
+      >
+        <h2
+          class="chakra-heading css-13t2rws"
+        >
+          Plataforma Provas
+        </h2>
+        <div
+          class="chakra-form-control css-0"
+          role="group"
+        >
+          <label
+            class="chakra-form__label css-13ih5c7"
+            for="field-:r4:"
+            id="field-:r4:-label"
+          >
+            E-mail:
+          </label>
+          <input
+            class="chakra-input css-0"
+            id="field-:r4:"
+            name="email"
+            placeholder="Insira o e-mail"
+            type="email"
+          />
+        </div>
+        <div
+          class="chakra-form-control css-0"
+          role="group"
+        >
+          <label
+            class="chakra-form__label css-13ih5c7"
+            for="field-:r5:"
+            id="field-:r5:-label"
+          >
+            Senha:
+          </label>
+          <input
+            class="chakra-input css-0"
+            id="field-:r5:"
+            name="password"
+            placeholder="Insira a senha"
+            type="password"
+          />
+        </div>
+        <button
+          class="chakra-button css-uxt1e8"
+          type="submit"
+        >
+          Entrar
+        </button>
+        <button
+          class="chakra-button css-uxt1e8"
+          type="button"
+        >
+          Novo Usuário
+        </button>
+      </form>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

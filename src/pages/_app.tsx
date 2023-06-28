@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { SessionProvider } from 'next-auth/react'
 import theme from '../styles/theme'
 import '../styles/index.css'
-import AuthProvider from 'context/authProvider'
+import AuthProvider from '../context/authProvider'
 
 export default function App({
   Component,

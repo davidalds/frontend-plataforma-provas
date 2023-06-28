@@ -1,6 +1,6 @@
 import { Divider, HStack, Heading, SimpleGrid } from '@chakra-ui/react'
 import BaseCard from 'components/Card'
-import { ProvaResponse } from 'services/queries/provas'
+import { ProvaResponse } from '../../services/queries/provas'
 import { AiOutlineProfile } from 'react-icons/ai'
 import { BsClipboardData } from 'react-icons/bs'
 

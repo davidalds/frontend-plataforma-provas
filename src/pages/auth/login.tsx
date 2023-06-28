@@ -5,9 +5,9 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import WrapFormInput from 'components/Form/WrapFormInput'
 import { yupResolver } from '@hookform/resolvers/yup'
-import schema from 'schemas/loginSchema'
-import { LoginForm } from 'types/loginTypes'
+import { LoginForm } from '../../types/loginTypes'
 import { useState } from 'react'
+import schema from '../../schemas/loginSchema'
 
 const LoginPage = () => {
   const {

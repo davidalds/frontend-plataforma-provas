@@ -20,12 +20,12 @@ import {
 import { IoIosAdd } from 'react-icons/io'
 import { AiOutlineMinus } from 'react-icons/ai'
 import { useSWRConfig } from 'swr'
-import api from 'services'
 import { useRouter } from 'next/router'
-import RequireAuth from 'context/RequireAuth'
 import WrapInputs from 'components/Form/WrapInputs'
 import WrapFormInput from 'components/Form/WrapFormInput'
 import HeadingForm from 'components/Form/HeadingForm'
+import api from '../../../services'
+import RequireAuth from '../../../context/RequireAuth'
 
 const arr_options_letter = ['A', 'B', 'C', 'D']
 

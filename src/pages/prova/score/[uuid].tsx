@@ -12,11 +12,11 @@ import {
 import BaseCard from 'components/Card'
 import Layout from 'components/Layout'
 import ModalFeedbackQuestions from 'components/ModalFeedbackQuestions'
-import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { fetcherProvaScore } from 'services/queries/provas'
 import useSWR from 'swr'
+import RequireAuth from '../../../context/RequireAuth'
+import { fetcherProvaScore } from '../../../services/queries/provas'
 
 const ProvaScore = () => {
   const { data: session } = useSession()

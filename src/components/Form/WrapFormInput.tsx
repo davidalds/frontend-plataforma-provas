@@ -8,7 +8,11 @@ const WrapFormInput = ({
   children,
 }: IPropsFormInput) => {
   return (
-    <FormControl isInvalid={!!errors} isReadOnly={isReadOnly}>
+    <FormControl
+      isInvalid={!!errors}
+      isReadOnly={isReadOnly}
+      role="form-control"
+    >
       {label ? (
         <FormLabel color={'mainBlue.600'} fontWeight={'bold'}>
           {label}

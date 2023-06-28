@@ -1,4 +1,4 @@
-import api from 'services'
+import api from '../../../services'
 
 type ProvasData = {
   prova_id: number

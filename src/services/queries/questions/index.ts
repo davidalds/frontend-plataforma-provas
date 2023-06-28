@@ -1,4 +1,4 @@
-import api from 'services'
+import api from '../../../services'
 
 interface Question {
   question_id: number

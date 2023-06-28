@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Pagination /> test number of buttons bigger than available pages 1`] = `
+<Pagination
+  limitPerPage={10}
+  offsetFc={[MockFunction]}
+  totalDataElements={100}
+  totalShowedButtonsInPagination={5}
+/>
+`;

@@ -1,17 +1,8 @@
 import {
-  Avatar,
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
   Grid,
   GridItem,
-  HStack,
-  Icon,
-  IconButton,
   Input,
   Stack,
-  Text,
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
@@ -19,22 +10,24 @@ import WrapFormInput from 'components/Form/WrapFormInput'
 import WrapInputs from 'components/Form/WrapInputs'
 import Layout from 'components/Layout'
 import ModalListCandidatos from 'components/ModalListCandidatos'
-import { useToastHook } from 'hooks/useToast'
-import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { AiOutlineMinus } from 'react-icons/ai'
 import { IoIosAdd } from 'react-icons/io'
-import api from 'services'
-import { fetcherProvaInfo, fetcherUsersByProva } from 'services/queries/provas'
-import { UsersCandidatoResponse } from 'services/queries/users'
 import useSWR, { KeyedMutator } from 'swr'
 import { useForm } from 'react-hook-form'
-import { FormProvaInfo } from 'types/provaInfoTypes'
 import { AiOutlineOrderedList } from 'react-icons/ai'
 import HeaderProvaInfo from 'components/HeaderProvaInfo'
 import CandidatoCard from 'components/CandidatoCard'
+import { UsersCandidatoResponse } from '../../../services/queries/users'
+import {
+  fetcherProvaInfo,
+  fetcherUsersByProva,
+} from '../../../services/queries/provas'
+import { FormProvaInfo } from '../../../types/provaInfoTypes'
+import { useToastHook } from '../../../hooks/useToast'
+import api from '../../../services'
+import RequireAuth from '../../../context/RequireAuth'
 
 type ModalRefType = {
   mutateListUsersCandidato: KeyedMutator<UsersCandidatoResponse>

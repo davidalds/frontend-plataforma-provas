@@ -2,7 +2,7 @@ import { TabList, Tabs, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 import BaseModal from 'components/Modal'
 import { IPropsModalFeedbackQuestions } from './types/modalFeedbackQuestions'
 import useSWR from 'swr'
-import { fetcherQuestionsFeedback } from 'services/queries/questions'
+import { fetcherQuestionsFeedback } from '../../services/queries/questions'
 import Question from 'components/Question'
 
 const ModalFeedbackQuestions = ({

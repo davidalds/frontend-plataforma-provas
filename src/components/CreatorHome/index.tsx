@@ -9,7 +9,7 @@ import {
 import BaseCard from 'components/Card'
 import Link from 'next/link'
 import { IoIosAdd } from 'react-icons/io'
-import { ProvaResponse } from 'services/queries/provas'
+import { ProvaResponse } from '../../services/queries/provas'
 import { AiOutlineFileSearch } from 'react-icons/ai'
 
 interface IPropsParticipantHome {

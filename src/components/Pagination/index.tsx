@@ -85,7 +85,7 @@ const Pagination = ({
           isDisabled={page === 1}
           onClick={handleStart}
         >
-          Inicío
+          Início
         </Button>
         <IconButton
           aria-label="anterior"

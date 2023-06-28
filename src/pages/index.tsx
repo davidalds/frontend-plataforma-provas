@@ -1,11 +1,11 @@
 import { Spinner, VStack } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import { fetcherProvas } from 'services/queries/provas'
 import useSWR from 'swr'
-import RequireAuth from 'context/RequireAuth'
 import { useSession } from 'next-auth/react'
 import ParticipantHome from 'components/ParticipantHome'
 import CreatorHome from 'components/CreatorHome'
+import RequireAuth from '../context/RequireAuth'
+import { fetcherProvas } from '../services/queries/provas'
 
 export default function Home() {
   const { data: session } = useSession()
