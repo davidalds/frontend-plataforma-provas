@@ -1,6 +1,8 @@
 import {
   Grid,
   GridItem,
+  Icon,
+  IconButton,
   Input,
   Stack,
   VStack,
@@ -16,9 +18,9 @@ import { useEffect, useRef, useState } from 'react'
 import { IoIosAdd } from 'react-icons/io'
 import useSWR, { KeyedMutator } from 'swr'
 import { useForm } from 'react-hook-form'
-import { AiOutlineOrderedList } from 'react-icons/ai'
+import { AiOutlineMinus, AiOutlineOrderedList } from 'react-icons/ai'
 import HeaderProvaInfo from 'components/HeaderProvaInfo'
-import CandidatoCard from 'components/CandidatoCard'
+import UserCard from 'components/CandidatoCard'
 import { UsersCandidatoResponse } from '../../../services/queries/users'
 import {
   fetcherProvaInfo,
@@ -228,11 +230,20 @@ const ProvaInfo = () => {
                 maxH={'100vh'}
               >
                 {data?.users.map(({ username, email, uuid }) => (
-                  <CandidatoCard
+                  <UserCard
                     key={uuid}
                     username={username}
                     email={email}
-                    deslinkUser={() => deslinkUsersInProva(uuid)}
+                    action={
+                      <IconButton
+                        onClick={() => deslinkUsersInProva(uuid)}
+                        aria-label="desvincular"
+                        bg={'mainBlue.100'}
+                        size={'sm'}
+                        icon={<Icon as={AiOutlineMinus} />}
+                        title="Desvincular"
+                      />
+                    }
                   />
                 ))}
               </Stack>

@@ -186,7 +186,7 @@ const CreateProva = () => {
                       {index > 0 ? (
                         <Button
                           size={'sm'}
-                          colorScheme={'orange'}
+                          bg={'mainBlue.100'}
                           leftIcon={<Icon as={AiOutlineMinus} />}
                           onClick={() => remove(index)}
                         >

@@ -1,218 +1,76 @@
-import {
-  VStack,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  HStack,
-  Button,
-  Spinner,
-  useDisclosure,
-} from '@chakra-ui/react'
-import ConfirmQuestionModal from 'components/ConfirmQuestionsModal'
-import QuestionHeader from 'components/HeaderQuestion'
+import { Button, Box, Heading, Text } from '@chakra-ui/react'
 import Layout from 'components/Layout'
-import Question from 'components/Question'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import api from '../../services'
 import RequireAuth from '../../context/RequireAuth'
-import { fetcherQuestions } from '../../services/queries/questions'
-
-type Options = {
-  option_question_id: number
-  option_id: number
-}
+import ProvaCardInfo from 'components/ProvaCardInfo'
+import Link from 'next/link'
+import { fetcherProvaInfo } from '../../services/queries/provas'
+import BoxStack from 'components/ProvaCardInfo/BoxStack'
+import UserCard from 'components/CandidatoCard'
 
 const Prova = () => {
   const router = useRouter()
-  const { data: session } = useSession()
-  const [uuid, setUuid] = useState<string>('')
-  const { data, error, isLoading } = useSWR(
-    uuid ? `questions/${uuid}` : null,
-    fetcherQuestions
+  const [uuidProva, setUuidProva] = useState<string>()
+  const { data, isLoading, error } = useSWR(
+    uuidProva ? `prova/${uuidProva}` : null,
+    fetcherProvaInfo
   )
 
-  const [optionsArr, setOptionsArr] = useState<Options[]>([])
-  const [emptyQuestionsIndex, setEmptyQuestionsIndex] = useState<number[]>([])
-
-  const { isOpen, onClose, onOpen } = useDisclosure()
-
-  const [tabIndex, setTabIndex] = useState<number>(0)
-
   useEffect(() => {
-    if (router) {
+    if (router.query.uuid !== undefined) {
       if (typeof router.query.uuid === 'string') {
-        setUuid(router.query.uuid)
+        setUuidProva(router.query.uuid)
       }
     }
   }, [router])
 
-  const handleNextClickChange = () => {
-    if (data?.questions.length === tabIndex + 1) return
-    setTabIndex((prevState) => prevState + 1)
-  }
-
-  const handleBackClickChange = () => {
-    if (tabIndex === 0) return
-    setTabIndex((prevState) => prevState - 1)
-  }
-
-  const handleTabsChange = (index: number) => {
-    setTabIndex(index)
-  }
-
-  const addOption = (option: Options) => {
-    if (optionsArr.length) {
-      setOptionsArr((prevState) => {
-        const index = prevState.findIndex(
-          (op) => op.option_question_id === option.option_question_id
-        )
-
-        if (index !== -1) {
-          prevState.splice(index, 1, option)
-        } else {
-          prevState.push(option)
-        }
-
-        return [...prevState]
-      })
-    } else {
-      setOptionsArr((prevState) => [...prevState, option])
-    }
-  }
-
-  const sendProva = async () => {
-    try {
-      await api.post(`questionverify/${session?.user.uuid}`, {
-        prova_id: data?.prova_id,
-        options: optionsArr,
-      })
-      onClose()
-      router.push('/')
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const checkMarkedOptions = () => {
-    const arr: number[] = []
-    data?.questions.forEach(({ question_id }, index) => {
-      if (
-        !optionsArr.length ||
-        !optionsArr.find(
-          ({ option_question_id }) => option_question_id === question_id
-        )
-      ) {
-        arr.push(index + 1)
-      }
-    })
-    setEmptyQuestionsIndex(arr)
-  }
-
-  const handleSendProva = () => {
-    setEmptyQuestionsIndex([])
-    if (data) {
-      if (optionsArr.length < data.questions.length) {
-        checkMarkedOptions()
-      }
-      onOpen()
-    }
-  }
-
   return (
     <RequireAuth>
       <Layout title="Prova">
-        <ConfirmQuestionModal
-          isOpen={isOpen}
-          onClose={onClose}
-          questionsEmptyList={emptyQuestionsIndex}
-          sendProva={sendProva}
-        />
-        <VStack>
-          <QuestionHeader provaTitle={data?.prova_title || 'Título da prova'} />
-          {isLoading ? (
-            <Spinner size={'xl'} />
+        <Box m={4}>
+          {data ? (
+            <ProvaCardInfo
+              cardTitle={data.prova.title}
+              button={
+                <Button
+                  colorScheme={'green'}
+                  size={'lg'}
+                  w={'100%'}
+                  variant={'outline'}
+                  as={Link}
+                  href={`area/${router.query.uuid}`}
+                >
+                  Iniciar Prova
+                </Button>
+              }
+            >
+              <BoxStack heading={'Pontuação'}>
+                <Text fontSize="md">{data.prova.total_score} ponto(s)</Text>
+              </BoxStack>
+              <BoxStack heading={'Quantidade de Questões'}>
+                <Text fontSize="md">
+                  {data.prova.total_question}{' '}
+                  {data.prova.total_question > 1 ? 'questões' : 'questão'}
+                </Text>
+              </BoxStack>
+              <BoxStack heading={'Tempo de Prova'}>
+                <Text fontSize="md">60 minutos</Text>
+              </BoxStack>
+              <BoxStack heading={'Criador'}>
+                <Box display={'flex'}>
+                  <UserCard
+                    username={data.prova.creator.username}
+                    email={data.prova.creator.email}
+                  />
+                </Box>
+              </BoxStack>
+            </ProvaCardInfo>
           ) : (
-            <>
-              <Tabs
-                variant="soft-rounded"
-                colorScheme="blue"
-                isFitted
-                isManual
-                index={tabIndex}
-                onChange={handleTabsChange}
-              >
-                <TabList>
-                  {data?.questions.map(({ question_id }, index) => {
-                    if (emptyQuestionsIndex.includes(index + 1)) {
-                      return (
-                        <Tab
-                          key={question_id}
-                          bg={'salmon'}
-                          color={'white'}
-                          _selected={{ bg: 'salmon', color: 'white' }}
-                        >
-                          {index + 1}
-                        </Tab>
-                      )
-                    }
-                    return <Tab key={question_id}>{index + 1}</Tab>
-                  })}
-                </TabList>
-                <TabPanels>
-                  {data?.questions.map(
-                    ({ question_id, question_title, options, peso }, index) => (
-                      <TabPanel key={question_id}>
-                        <Question
-                          ind={index + 1}
-                          idQuestion={question_id}
-                          addOption={addOption}
-                          title={question_title}
-                          options={options}
-                          peso={peso}
-                        />
-                      </TabPanel>
-                    )
-                  )}
-                </TabPanels>
-              </Tabs>
-              <HStack justifyContent={'end'}>
-                {data?.questions.length ? (
-                  <>
-                    {tabIndex ? (
-                      <Button
-                        colorScheme={'gray'}
-                        onClick={handleBackClickChange}
-                      >
-                        Anterior
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                    <Button
-                      colorScheme={'green'}
-                      onClick={
-                        data?.questions.length === tabIndex + 1
-                          ? handleSendProva
-                          : handleNextClickChange
-                      }
-                    >
-                      {data?.questions.length === tabIndex + 1
-                        ? 'Finalizar prova'
-                        : 'Próximo'}
-                    </Button>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </HStack>
-            </>
+            <></>
           )}
-        </VStack>
+        </Box>
       </Layout>
     </RequireAuth>
   )

@@ -1,23 +1,10 @@
-import {
-  Avatar,
-  Box,
-  Flex,
-  HStack,
-  Text,
-  IconButton,
-  Icon,
-} from '@chakra-ui/react'
-import { AiOutlineMinus } from 'react-icons/ai'
+import { Avatar, Box, Flex, HStack, Text } from '@chakra-ui/react'
 import { IPropsCandidatoCard } from './types/canditatoCard'
 
-const CandidatoCard = ({
-  username,
-  email,
-  deslinkUser,
-}: IPropsCandidatoCard) => {
+const UserCard = ({ username, email, action }: IPropsCandidatoCard) => {
   return (
     <HStack
-      justifyContent={'space-between'}
+      justifyContent={action ? 'space-between' : 'flex-start'}
       boxShadow={'lg'}
       p={2}
       rounded={'md'}
@@ -29,16 +16,9 @@ const CandidatoCard = ({
           <Text>{email}</Text>
         </Box>
       </Flex>
-      <IconButton
-        onClick={deslinkUser}
-        aria-label="desvincular"
-        colorScheme={'orange'}
-        size={'sm'}
-        icon={<Icon as={AiOutlineMinus} />}
-        title="Desvincular"
-      />
+      {action}
     </HStack>
   )
 }
 
-export default CandidatoCard
+export default UserCard

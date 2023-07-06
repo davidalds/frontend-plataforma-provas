@@ -44,6 +44,10 @@ type ProvaInfoResponse = {
     end_date: Date
     total_score: number
     total_question: number
+    creator: {
+      username: string
+      email: string
+    }
   }
 }
 

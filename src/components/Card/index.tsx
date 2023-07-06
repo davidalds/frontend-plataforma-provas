@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardBody,
@@ -26,7 +25,7 @@ const BaseCard = ({
         </Heading>
       </CardHeader>
       <CardBody>{children}</CardBody>
-      <CardFooter>
+      <CardFooter justifyContent={'flex-end'}>
         {cardButtonLink && cardButtonTitle ? (
           <Button
             as={Link}
