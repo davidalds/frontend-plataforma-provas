@@ -35,7 +35,7 @@ const ProvaArea = () => {
   const { data: session } = useSession()
   const [uuid, setUuid] = useState<string>('')
   const { data, error, isLoading } = useSWR(
-    uuid ? `questions/${uuid}` : null,
+    uuid && session ? `questions/${session.user.uuid}/${uuid}` : null,
     fetcherQuestions
   )
 

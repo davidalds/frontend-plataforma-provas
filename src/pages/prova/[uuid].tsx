@@ -11,12 +11,14 @@ import BoxStack from 'components/ProvaCardInfo/BoxStack'
 import UserCard from 'components/CandidatoCard'
 import BreadCrumb from 'components/Breadcrumb'
 import ErrorAlertPage from 'components/ErrorAlertPage'
+import { useSession } from 'next-auth/react'
 
 const Prova = () => {
+  const { data: session } = useSession()
   const router = useRouter()
   const [uuidProva, setUuidProva] = useState<string>()
   const { data, isLoading, error } = useSWR(
-    uuidProva ? `prova/${uuidProva}` : null,
+    uuidProva && session ? `prova/${session.user.uuid}/${uuidProva}` : null,
     fetcherProvaInfo
   )
 
