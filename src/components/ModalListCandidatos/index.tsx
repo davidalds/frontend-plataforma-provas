@@ -49,7 +49,11 @@ const ModalListCandidatos: ForwardRefRenderFunction<
 
   const { register, handleSubmit, resetField } = useForm<{ email: string }>()
 
-  useImperativeHandle(ref, mutateUsersCandidato)
+  const refetchUsersCandidato = () => {
+    mutateUsersCandidato()
+  }
+
+  useImperativeHandle(ref, refetchUsersCandidato)
 
   const [uuidUsers, setUuidUsers] = useState<string[]>([])
 

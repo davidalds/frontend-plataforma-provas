@@ -42,7 +42,7 @@ import { Entry } from '../../../types/entriesType'
 import { formatDateToString } from '../../../utils/dateToString'
 
 type ModalRefType = {
-  mutateListUsersCandidato: KeyedMutator<UsersCandidatoResponse>
+  refetchUsersCandidato(): void
 }
 
 const ProvaInfo = () => {
@@ -124,16 +124,15 @@ const ProvaInfo = () => {
           `provas/deslink/${session.user.uuid}/${router.query.uuid}/${uuidDeslinkUser}`
         )
 
+        mutateUsersByProva()
+        modalRef.current?.refetchUsersCandidato()
+
         toast({
           status: 'success',
           title: 'Candidato desvinculado com sucesso',
         })
-
-        mutateUsersByProva()
-        modalRef.current?.mutateListUsersCandidato()
       }
     } catch (error) {
-      toast()
       toast({
         status: 'error',
         title: 'Ocorreu um erro ao desvincular candidato da prova',
