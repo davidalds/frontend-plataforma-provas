@@ -12,6 +12,7 @@ import UserCard from 'components/CandidatoCard'
 import BreadCrumb from 'components/Breadcrumb'
 import ErrorAlertPage from 'components/ErrorAlertPage'
 import { useSession } from 'next-auth/react'
+import { formatDateToString } from '../../utils/dateToString'
 
 const Prova = () => {
   const { data: session } = useSession()
@@ -70,6 +71,16 @@ const Prova = () => {
                 </BoxStack>
                 <BoxStack heading={'Tempo de Prova'}>
                   <Text fontSize="md">60 minutos</Text>
+                </BoxStack>
+                <BoxStack heading={'Data de abertura'}>
+                  <Text fontSize="md">
+                    {formatDateToString(data.prova.initial_date)}
+                  </Text>
+                </BoxStack>
+                <BoxStack heading={'Data de fechamento'}>
+                  <Text fontSize="md">
+                    {formatDateToString(data.prova.end_date)}
+                  </Text>
                 </BoxStack>
                 <BoxStack heading={'Criador'}>
                   <Box display={'flex'}>

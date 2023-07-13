@@ -40,6 +40,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import schema from '../../../schemas/editProva'
 import { Entry } from '../../../types/entriesType'
 import { c } from 'msw/lib/glossary-de6278a9'
+import { formatDateToString } from '../../../utils/dateToString'
 
 type ModalRefType = {
   mutateListUsersCandidato: KeyedMutator<UsersCandidatoResponse>
@@ -64,7 +65,12 @@ const ProvaInfo = () => {
     error: errorProvaInfo,
     isLoading: isLoadingProvaInfo,
     mutate: mutateProvaInfo,
-  } = useSWR(uuidProva ? `prova/${router.query.uuid}` : null, fetcherProvaInfo)
+  } = useSWR(
+    uuidProva && session
+      ? `prova/${session?.user.uuid}/${router.query.uuid}`
+      : null,
+    fetcherProvaInfo
+  )
 
   const {
     register,
@@ -165,22 +171,7 @@ const ProvaInfo = () => {
       const data = Object.entries(dataProvaInfo.prova) as entries
       data.forEach(([key, value]) => {
         if (key === 'initial_date' || key === 'end_date') {
-          const date = new Date(value)
-          const year = date.getFullYear()
-          const month = date.getMonth() + 1
-          const day = date.getDate()
-          const hours = date.getHours()
-          const minutes = date.getMinutes()
-
-          const strH = `${hours < 10 ? '0' + hours : hours}:${
-            minutes < 10 ? '0' + minutes : minutes
-          }`
-
-          const str = `${year}-${month < 10 ? '0' + month : month}-${
-            day < 10 ? '0' + day : day
-          } ${strH}`
-
-          setValue(key, str)
+          setValue(key, formatDateToString(value))
         } else {
           setValue(key, value)
         }

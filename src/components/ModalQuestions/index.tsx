@@ -30,6 +30,7 @@ import schema from '../../schemas/editQuestionSchema'
 import { useToastHook } from '../../hooks/useToast'
 import api from '../../services'
 import ConfirmDeleteQuestion from 'components/ConfirmDeleteQuestion'
+import { useSession } from 'next-auth/react'
 
 const defaultQuestion = {
   question_title: '',
@@ -66,6 +67,7 @@ const ModalQuestions = ({
   resetProvaInfo,
 }: IPropsModalQuestions) => {
   const btnRef = useRef<HTMLButtonElement>(null)
+  const { data: session } = useSession()
 
   const toast = useToastHook()
 
@@ -75,7 +77,9 @@ const ModalQuestions = ({
     error,
     mutate: refetchQuestions,
   } = useSWR(
-    uuidProva ? `questions/${uuidProva}?isFeedback=true` : null,
+    uuidProva && session
+      ? `questions/${session?.user.uuid}/${uuidProva}?isFeedback=true`
+      : null,
     fetcherQuestions
   )
 
