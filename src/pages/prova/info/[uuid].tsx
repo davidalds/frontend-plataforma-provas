@@ -39,7 +39,6 @@ import { BiPencil } from 'react-icons/bi'
 import { yupResolver } from '@hookform/resolvers/yup'
 import schema from '../../../schemas/editProva'
 import { Entry } from '../../../types/entriesType'
-import { c } from 'msw/lib/glossary-de6278a9'
 import { formatDateToString } from '../../../utils/dateToString'
 
 type ModalRefType = {
@@ -110,7 +109,10 @@ const ProvaInfo = () => {
         return Promise.resolve()
       }
     } catch (error) {
-      console.log(error)
+      toast({
+        status: 'error',
+        title: 'Ocorreu um erro ao vincular usuários',
+      })
       return Promise.reject()
     }
   }
