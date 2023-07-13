@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 import { IBoxStack } from './interfaces'
 
 const BoxStack = ({ heading, children }: IBoxStack) => {

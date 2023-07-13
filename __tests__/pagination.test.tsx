@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 import Pagination from 'components/Pagination'
 
 describe('<Pagination />', () => {
-  afterAll(() => {
+  beforeAll(() => {
     expect(
       <Pagination
         totalDataElements={100}

@@ -52,6 +52,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: '/auth/login',
+    newUser: '/auth/register',
   },
   secret: process.env.SECRETKEY,
 }

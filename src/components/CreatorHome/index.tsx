@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Divider,
   HStack,
@@ -11,18 +12,17 @@ import Link from 'next/link'
 import { IoIosAdd } from 'react-icons/io'
 import { ProvaResponse } from '../../services/queries/provas'
 import { AiOutlineFileSearch } from 'react-icons/ai'
+import AlertComponent from 'components/Alert'
+import HeadingHome from 'components/HeadingHome'
 
-interface IPropsParticipantHome {
+interface IPropsCreatorHome {
   data: ProvaResponse | undefined
 }
 
-const CreatorHome = ({ data }: IPropsParticipantHome) => {
+const CreatorHome = ({ data }: IPropsCreatorHome) => {
   return (
     <>
-      <HStack p={4} w={'100%'} justifyContent={'space-between'}>
-        <Heading size={'lg'} color={'mainBlue.600'} fontWeight={'medium'}>
-          Provas criadas
-        </Heading>
+      <HeadingHome headingText={'Provas criadas'}>
         <Button
           as={Link}
           colorScheme={'blue'}
@@ -31,21 +31,30 @@ const CreatorHome = ({ data }: IPropsParticipantHome) => {
         >
           Criar Nova Prova
         </Button>
-      </HStack>
+      </HeadingHome>
       <Divider />
-      <SimpleGrid p={4} columns={[1, 2, 3]} spacing={'40px'}>
-        {data?.provas.map(({ prova_id, title, description, uuid }) => (
-          <BaseCard
-            key={prova_id}
-            cardTitle={title}
-            cardButtonLink={`prova/info/${uuid}`}
-            cardButtonTitle={'Visualizar informações'}
-            cardButtonIcon={AiOutlineFileSearch}
-          >
-            {description}
-          </BaseCard>
-        ))}
-      </SimpleGrid>
+      {data && data.provas.length > 0 ? (
+        <SimpleGrid p={4} columns={[1, 2, 3]} spacing={'40px'}>
+          {data?.provas.map(({ prova_id, title, description, uuid }) => (
+            <BaseCard
+              key={prova_id}
+              cardTitle={title}
+              cardButtonLink={`prova/info/${uuid}`}
+              cardButtonTitle={'Visualizar informações'}
+              cardButtonIcon={AiOutlineFileSearch}
+            >
+              {description}
+            </BaseCard>
+          ))}
+        </SimpleGrid>
+      ) : (
+        <Box p={4}>
+          <AlertComponent
+            title={'Você não possui provas criadas'}
+            statusType="info"
+          />
+        </Box>
+      )}
     </>
   )
 }

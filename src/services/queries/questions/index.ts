@@ -11,6 +11,7 @@ interface QuestionData extends Question {
     option_id: number
     option_title: string
     option_letter: string
+    iscorrect?: boolean
   }[]
 }
 

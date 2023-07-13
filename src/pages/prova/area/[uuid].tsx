@@ -21,6 +21,9 @@ import useSWR from 'swr'
 import api from '../../../services'
 import RequireAuth from '../../../context/RequireAuth'
 import { fetcherQuestions } from '../../../services/queries/questions'
+import BreadCrumb from 'components/Breadcrumb'
+import { useToastHook } from '../../../hooks/useToast'
+import ErrorAlertPage from 'components/ErrorAlertPage'
 
 type Options = {
   option_question_id: number
@@ -35,6 +38,8 @@ const ProvaArea = () => {
     uuid ? `questions/${uuid}` : null,
     fetcherQuestions
   )
+
+  const toast = useToastHook()
 
   const [optionsArr, setOptionsArr] = useState<Options[]>([])
   const [emptyQuestionsIndex, setEmptyQuestionsIndex] = useState<number[]>([])
@@ -93,7 +98,9 @@ const ProvaArea = () => {
       })
       onClose()
       router.push('/')
+      toast({ status: 'success', title: 'Prova respondida com sucesso' })
     } catch (err) {
+      toast({ status: 'error', title: 'Ocorreu um erro ao responder prova' })
       console.log(err)
     }
   }
@@ -126,93 +133,113 @@ const ProvaArea = () => {
   return (
     <RequireAuth>
       <Layout title="Prova Área">
-        <ConfirmQuestionModal
-          isOpen={isOpen}
-          onClose={onClose}
-          questionsEmptyList={emptyQuestionsIndex}
-          sendProva={sendProva}
-        />
-        <VStack>
-          <QuestionHeader provaTitle={data?.prova_title || 'Título da prova'} />
-          {isLoading ? (
-            <Spinner size={'xl'} />
-          ) : (
-            <>
-              <Tabs
-                variant="soft-rounded"
-                colorScheme="blue"
-                isFitted
-                isManual
-                index={tabIndex}
-                onChange={handleTabsChange}
-              >
-                <TabList>
-                  {data?.questions.map(({ question_id }, index) => {
-                    if (emptyQuestionsIndex.includes(index + 1)) {
-                      return (
-                        <Tab
-                          key={question_id}
-                          bg={'salmon'}
-                          color={'white'}
-                          _selected={{ bg: 'salmon', color: 'white' }}
-                        >
-                          {index + 1}
-                        </Tab>
-                      )
-                    }
-                    return <Tab key={question_id}>{index + 1}</Tab>
-                  })}
-                </TabList>
-                <TabPanels>
-                  {data?.questions.map(
-                    ({ question_id, question_title, options, peso }, index) => (
-                      <TabPanel key={question_id}>
-                        <Question
-                          ind={index + 1}
-                          idQuestion={question_id}
-                          addOption={addOption}
-                          title={question_title}
-                          options={options}
-                          peso={peso}
-                        />
-                      </TabPanel>
-                    )
-                  )}
-                </TabPanels>
-              </Tabs>
-              <HStack justifyContent={'end'}>
-                {data?.questions.length ? (
-                  <>
-                    {tabIndex ? (
-                      <Button
-                        colorScheme={'gray'}
-                        onClick={handleBackClickChange}
-                      >
-                        Anterior
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                    <Button
-                      colorScheme={'green'}
-                      onClick={
-                        data?.questions.length === tabIndex + 1
-                          ? handleSendProva
-                          : handleNextClickChange
+        <ErrorAlertPage
+          errorTitle="Ocorreu um erro ao carregar área da prova"
+          error={error}
+        >
+          <ConfirmQuestionModal
+            isOpen={isOpen}
+            onClose={onClose}
+            questionsEmptyList={emptyQuestionsIndex}
+            sendProva={sendProva}
+          />
+          <BreadCrumb
+            links={[
+              { path: `/prova/${router.query.uuid}`, pageName: 'Prova' },
+              {
+                path: router.asPath,
+                pageName: 'Área da Prova',
+                isCurrent: true,
+              },
+            ]}
+          />
+          <VStack>
+            <QuestionHeader
+              provaTitle={data?.prova_title || 'Título da prova'}
+            />
+            {isLoading ? (
+              <Spinner size={'xl'} />
+            ) : (
+              <>
+                <Tabs
+                  variant="soft-rounded"
+                  colorScheme="blue"
+                  isFitted
+                  isManual
+                  index={tabIndex}
+                  onChange={handleTabsChange}
+                >
+                  <TabList>
+                    {data?.questions.map(({ question_id }, index) => {
+                      if (emptyQuestionsIndex.includes(index + 1)) {
+                        return (
+                          <Tab
+                            key={question_id}
+                            bg={'salmon'}
+                            color={'white'}
+                            _selected={{ bg: 'salmon', color: 'white' }}
+                          >
+                            {index + 1}
+                          </Tab>
+                        )
                       }
-                    >
-                      {data?.questions.length === tabIndex + 1
-                        ? 'Finalizar prova'
-                        : 'Próximo'}
-                    </Button>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </HStack>
-            </>
-          )}
-        </VStack>
+                      return <Tab key={question_id}>{index + 1}</Tab>
+                    })}
+                  </TabList>
+                  <TabPanels>
+                    {data?.questions.map(
+                      (
+                        { question_id, question_title, options, peso },
+                        index
+                      ) => (
+                        <TabPanel key={question_id}>
+                          <Question
+                            ind={index + 1}
+                            idQuestion={question_id}
+                            addOption={addOption}
+                            title={question_title}
+                            options={options}
+                            peso={peso}
+                          />
+                        </TabPanel>
+                      )
+                    )}
+                  </TabPanels>
+                </Tabs>
+                <HStack justifyContent={'end'}>
+                  {data?.questions.length ? (
+                    <>
+                      {tabIndex ? (
+                        <Button
+                          colorScheme={'gray'}
+                          onClick={handleBackClickChange}
+                        >
+                          Anterior
+                        </Button>
+                      ) : (
+                        <></>
+                      )}
+                      <Button
+                        colorScheme={'green'}
+                        onClick={
+                          data?.questions.length === tabIndex + 1
+                            ? handleSendProva
+                            : handleNextClickChange
+                        }
+                      >
+                        {data?.questions.length === tabIndex + 1
+                          ? 'Finalizar prova'
+                          : 'Próximo'}
+                      </Button>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </HStack>
+              </>
+            )}
+          </VStack>
+        </ErrorAlertPage>
       </Layout>
     </RequireAuth>
   )

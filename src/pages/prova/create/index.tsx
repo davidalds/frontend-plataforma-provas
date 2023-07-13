@@ -26,6 +26,7 @@ import WrapFormInput from 'components/Form/WrapFormInput'
 import HeadingForm from 'components/Form/HeadingForm'
 import api from '../../../services'
 import RequireAuth from '../../../context/RequireAuth'
+import BreadCrumb from 'components/Breadcrumb'
 
 const arr_options_letter = ['A', 'B', 'C', 'D']
 
@@ -96,6 +97,12 @@ const CreateProva = () => {
       const url = `provas/${session?.user.uuid}`
       await api.post<createProvaForm>(url, data)
       mutate(url)
+
+      toast({
+        status: 'success',
+        title: 'Prova criada com sucesso',
+      })
+
       router.replace('/')
     } catch (error) {
       toast({
@@ -110,6 +117,15 @@ const CreateProva = () => {
     <>
       <RequireAuth>
         <Layout title="Criar prova">
+          <BreadCrumb
+            links={[
+              {
+                path: router.asPath,
+                pageName: 'Cadastrar Prova',
+                isCurrent: true,
+              },
+            ]}
+          />
           <VStack w={'100%'}>
             <VStack
               as={'form'}
@@ -147,14 +163,14 @@ const CreateProva = () => {
                   errors={errors.initial_date}
                 >
                   <Input
-                    type="date"
+                    type="datetime-local"
                     variant="flushed"
                     {...register('initial_date')}
                   />
                 </WrapFormInput>
                 <WrapFormInput label={'Data final'} errors={errors.end_date}>
                   <Input
-                    type="date"
+                    type="datetime-local"
                     variant="flushed"
                     {...register('end_date')}
                   />
@@ -186,7 +202,7 @@ const CreateProva = () => {
                       {index > 0 ? (
                         <Button
                           size={'sm'}
-                          bg={'mainBlue.100'}
+                          color={'mainBlue.600'}
                           leftIcon={<Icon as={AiOutlineMinus} />}
                           onClick={() => remove(index)}
                         >

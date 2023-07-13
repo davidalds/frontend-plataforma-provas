@@ -33,30 +33,19 @@ const ModalFeedbackQuestions = ({
             ))}
           </TabList>
           <TabPanels>
-            {data?.questions.map(
-              (
-                {
-                  question_id,
-                  question_title,
-                  peso,
-                  options,
-                  option_answered_id,
-                },
-                index
-              ) => (
-                <TabPanel key={question_id}>
-                  <Question
-                    ind={index + 1}
-                    idQuestion={question_id}
-                    title={question_title}
-                    peso={peso}
-                    options={options}
-                    isFeedback={true}
-                    markedOptionId={option_answered_id}
-                  />
-                </TabPanel>
-              )
-            )}
+            {data?.questions.map((q, index) => (
+              <TabPanel key={q.question_id}>
+                <Question
+                  ind={index + 1}
+                  idQuestion={q.question_id}
+                  title={q.question_title}
+                  peso={q.peso}
+                  options={q.options}
+                  isFeedback={true}
+                  markedOptionId={q.option_answered_id}
+                />
+              </TabPanel>
+            ))}
           </TabPanels>
         </Tabs>
       </BaseModal>

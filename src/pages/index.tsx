@@ -6,6 +6,7 @@ import ParticipantHome from 'components/ParticipantHome'
 import CreatorHome from 'components/CreatorHome'
 import RequireAuth from '../context/RequireAuth'
 import { fetcherProvas } from '../services/queries/provas'
+import ErrorAlertPage from 'components/ErrorAlertPage'
 
 export default function Home() {
   const { data: session } = useSession()
@@ -27,15 +28,20 @@ export default function Home() {
     <>
       <RequireAuth>
         <Layout>
-          {isLoading ? (
-            <VStack>
-              <Spinner size={'lg'} />
-            </VStack>
-          ) : session?.user.user_type === 1 ? (
-            <CreatorHome data={openProvas} />
-          ) : (
-            <ParticipantHome data={openProvas} data2={closedProvas} />
-          )}
+          <ErrorAlertPage
+            errorTitle="Ocorreu um erro ao carregar a home"
+            error={error}
+          >
+            {isLoading ? (
+              <VStack>
+                <Spinner size={'lg'} />
+              </VStack>
+            ) : session?.user.user_type === 1 ? (
+              <CreatorHome data={openProvas} />
+            ) : (
+              <ParticipantHome data={openProvas} data2={closedProvas} />
+            )}
+          </ErrorAlertPage>
         </Layout>
       </RequireAuth>
     </>

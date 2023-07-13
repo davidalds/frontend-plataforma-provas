@@ -5,7 +5,7 @@ const optionSchema = {
   iscorrect: Yup.string().required('Campo obrigatório'),
 }
 
-const questionSchema = {
+export const questionSchema = {
   title: Yup.string().trim().required('Campo obrigatório'),
   // typeError permite que se capture o erro de tipo gerado no campo number quando o mesmo estiver em branco, lançando uma mensagem customizada de "Campo obrigatório"
   peso: Yup.number()

@@ -8,6 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { LoginForm } from '../../types/loginTypes'
 import { useState } from 'react'
 import schema from '../../schemas/loginSchema'
+import Link from 'next/link'
+import Logo2 from '../../../assets/logo2.png'
+import Image from 'next/image'
 
 const LoginPage = () => {
   const {
@@ -65,7 +68,15 @@ const LoginPage = () => {
         <Head>
           <title>Plataforma Provas - Login</title>
         </Head>
-        <Heading color={'mainBlue.600'}>Plataforma Provas</Heading>
+        <Image
+          src={Logo2}
+          alt="Logo Plataforma Provas"
+          width={300}
+          height={300}
+        />
+        <Heading color={'mainBlue.500'} size={'md'}>
+          Login
+        </Heading>
         <WrapFormInput label="E-mail:" errors={errors.email}>
           <Input
             type="email"
@@ -83,7 +94,13 @@ const LoginPage = () => {
         <Button type="submit" colorScheme="blue" w={'100%'} isLoading={loading}>
           Entrar
         </Button>
-        <Button colorScheme="green" w={'100%'} variant={'outline'}>
+        <Button
+          colorScheme="green"
+          w={'100%'}
+          variant={'outline'}
+          as={Link}
+          href={'/auth/register'}
+        >
           Novo Usuário
         </Button>
       </VStack>

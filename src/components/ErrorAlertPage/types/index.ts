@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
-export interface IProvaCardInfo {
-  cardTitle: string
-  button?: ReactElement
+export interface IPropsErrorsAlert {
+  errorTitle?: string
+  error: any
   children: ReactElement | ReactElement[]
 }
