@@ -1,12 +1,10 @@
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import { IconType } from 'react-icons'
 
 interface IPropsBaseCard {
   cardTitle: string
   children: ReactNode
-  cardButtonLink?: string
-  cardButtonTitle?: string
-  cardButtonIcon?: IconType
+  buttons: ReactElement | ReactElement[]
 }
 
 export type { IPropsBaseCard }

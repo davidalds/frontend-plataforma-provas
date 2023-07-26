@@ -3,7 +3,7 @@ import { IProps } from './Header/interfaces/layout'
 import Head from 'next/head'
 import { Box } from '@chakra-ui/react'
 
-const Layout = ({ title, children }: IProps) => {
+const Layout = ({ title, hiddenHeader, children }: IProps) => {
   return (
     <>
       <Head>
@@ -16,7 +16,7 @@ const Layout = ({ title, children }: IProps) => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Header />
+      {!hiddenHeader && <Header />}
       <Box minH={'100vh'}>{children}</Box>
     </>
   )

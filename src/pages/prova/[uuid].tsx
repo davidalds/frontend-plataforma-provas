@@ -1,11 +1,10 @@
-import { Button, Box, Text } from '@chakra-ui/react'
+import { Button, Box, Text, useDisclosure } from '@chakra-ui/react'
 import Layout from 'components/Layout'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import RequireAuth from '../../context/RequireAuth'
 import ProvaCardInfo from 'components/ProvaCardInfo'
-import Link from 'next/link'
 import { fetcherProvaInfo } from '../../services/queries/provas'
 import BoxStack from 'components/ProvaCardInfo/BoxStack'
 import UserCard from 'components/CandidatoCard'
@@ -13,15 +12,20 @@ import BreadCrumb from 'components/Breadcrumb'
 import ErrorAlertPage from 'components/ErrorAlertPage'
 import { useSession } from 'next-auth/react'
 import { formatDateToString } from '../../utils/dateToString'
+import ConfirmStartProva from 'components/ConfirmStartProva'
+import Link from 'next/link'
 
 const Prova = () => {
   const { data: session } = useSession()
+  const linkRef = useRef<HTMLAnchorElement>(null)
   const router = useRouter()
   const [uuidProva, setUuidProva] = useState<string>()
   const { data, isLoading, error } = useSWR(
     uuidProva && session ? `prova/${session.user.uuid}/${uuidProva}` : null,
     fetcherProvaInfo
   )
+
+  const { isOpen, onClose, onOpen } = useDisclosure()
 
   useEffect(() => {
     if (router.query.uuid !== undefined) {
@@ -31,6 +35,14 @@ const Prova = () => {
     }
   }, [router])
 
+  const redirectToAreaPage = () => {
+    if (linkRef.current) {
+      linkRef.current.click()
+      onClose()
+      router.replace('/')
+    }
+  }
+
   return (
     <RequireAuth>
       <Layout title="Prova">
@@ -38,6 +50,11 @@ const Prova = () => {
           errorTitle="Ocorreu um erro ao carregar informações da prova"
           error={error}
         >
+          <ConfirmStartProva
+            isOpen={isOpen}
+            onClose={onClose}
+            startProva={() => redirectToAreaPage()}
+          />
           <BreadCrumb
             links={[
               { path: router.asPath, pageName: 'Prova', isCurrent: true },
@@ -53,8 +70,7 @@ const Prova = () => {
                     size={'lg'}
                     w={'100%'}
                     variant={'outline'}
-                    as={Link}
-                    href={`area/${router.query.uuid}`}
+                    onClick={() => onOpen()}
                   >
                     Iniciar Prova
                   </Button>
@@ -70,7 +86,7 @@ const Prova = () => {
                   </Text>
                 </BoxStack>
                 <BoxStack heading={'Tempo de Prova'}>
-                  <Text fontSize="md">60 minutos</Text>
+                  <Text fontSize="md">{data.prova.timer} minutos</Text>
                 </BoxStack>
                 <BoxStack heading={'Data de abertura'}>
                   <Text fontSize="md">
@@ -90,6 +106,14 @@ const Prova = () => {
                     />
                   </Box>
                 </BoxStack>
+                <Link
+                  hidden
+                  ref={linkRef}
+                  href={`${router.basePath}/prova/area/${uuidProva}`}
+                  target="_blank"
+                >
+                  Hidden Link
+                </Link>
               </ProvaCardInfo>
             ) : (
               <></>

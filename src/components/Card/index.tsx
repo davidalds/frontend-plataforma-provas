@@ -10,13 +10,17 @@ import {
 import { IPropsBaseCard } from './interfaces/baseCard'
 import Link from 'next/link'
 
-const BaseCard = ({
-  cardTitle,
-  children,
-  cardButtonLink,
-  cardButtonTitle,
-  cardButtonIcon,
-}: IPropsBaseCard) => {
+// <Button
+//   as={Link}
+//   href={cardButtonLink}
+//   colorScheme={'blue'}
+//   variant={'outline'}
+//   leftIcon={cardButtonIcon && <Icon as={cardButtonIcon} />}
+// >
+//   {cardButtonTitle}
+// </Button>
+
+const BaseCard = ({ cardTitle, children, buttons }: IPropsBaseCard) => {
   return (
     <Card>
       <CardHeader>
@@ -25,21 +29,7 @@ const BaseCard = ({
         </Heading>
       </CardHeader>
       <CardBody>{children}</CardBody>
-      <CardFooter justifyContent={'flex-end'}>
-        {cardButtonLink && cardButtonTitle ? (
-          <Button
-            as={Link}
-            href={cardButtonLink}
-            colorScheme={'blue'}
-            variant={'outline'}
-            leftIcon={cardButtonIcon && <Icon as={cardButtonIcon} />}
-          >
-            {cardButtonTitle}
-          </Button>
-        ) : (
-          <></>
-        )}
-      </CardFooter>
+      <CardFooter justifyContent={'flex-end'}>{buttons}</CardFooter>
     </Card>
   )
 }

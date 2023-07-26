@@ -11,10 +11,19 @@ import ErrorAlertPage from 'components/ErrorAlertPage'
 export default function Home() {
   const { data: session } = useSession()
   const {
-    data: openProvas,
+    data: publishedProvas,
     error,
     isLoading,
-  } = useSWR(session ? `provas/${session.user.uuid}` : null, fetcherProvas)
+  } = useSWR(
+    session ? `provas/${session.user.uuid}?published=true` : null,
+    fetcherProvas
+  )
+
+  const { data: unpublishedProvas } = useSWR(
+    session ? `provas/${session.user.uuid}?published=false` : null,
+    fetcherProvas
+  )
+
   const { data: closedProvas } = useSWR(
     session
       ? session.user.user_type === 2
@@ -37,9 +46,9 @@ export default function Home() {
                 <Spinner size={'lg'} />
               </VStack>
             ) : session?.user.user_type === 1 ? (
-              <CreatorHome data={openProvas} />
+              <CreatorHome data={publishedProvas} data2={unpublishedProvas} />
             ) : (
-              <ParticipantHome data={openProvas} data2={closedProvas} />
+              <ParticipantHome data={publishedProvas} data2={closedProvas} />
             )}
           </ErrorAlertPage>
         </Layout>

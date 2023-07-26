@@ -1,4 +1,4 @@
-import { UsersCandidatoResponse } from 'services/queries/users'
+import { UsersCandidatoResponse } from '../../../services/queries/users'
 import { KeyedMutator } from 'swr'
 
 export interface IPropsModalListCandidatos {

@@ -31,6 +31,7 @@ import { useToastHook } from '../../hooks/useToast'
 import api from '../../services'
 import ConfirmDeleteQuestion from 'components/ConfirmDeleteQuestion'
 import { useSession } from 'next-auth/react'
+import useCatchErrors from '../../hooks/useCatchErrors'
 
 const defaultQuestion = {
   question_title: '',
@@ -70,6 +71,7 @@ const ModalQuestions = ({
   const { data: session } = useSession()
 
   const toast = useToastHook()
+  const { handleErrors } = useCatchErrors()
 
   const {
     data,
@@ -177,7 +179,7 @@ const ModalQuestions = ({
       toast({ status: 'success', title: 'Questões editadas com sucesso' })
       onClose()
     } catch (error) {
-      toast({ status: 'error', title: 'Ocorreu um erro ao editar questões' })
+      handleErrors(error, 'Ocorreu um erro ao editar questões')
     }
   }
 
@@ -209,7 +211,8 @@ const ModalQuestions = ({
       onCloseConfirmModal()
       toast({ status: 'success', title: 'Questão excluída com sucesso' })
     } catch (error) {
-      toast({ status: 'error', title: 'Ocorreu um erro ao deletar questão' })
+      onCloseConfirmModal()
+      handleErrors(error, 'Ocorreu um erro ao deletar questão')
     }
   }
 

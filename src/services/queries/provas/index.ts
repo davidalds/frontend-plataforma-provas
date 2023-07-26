@@ -8,6 +8,7 @@ type ProvasData = {
   end_date: Date
   uuid: string
   done: boolean
+  result: boolean
 }
 
 export type ProvaResponse = {
@@ -23,7 +24,7 @@ type ProvaScore = {
 type ProvaScoreResponse = {
   prova_title: string
   prova_score: number
-  score: ProvaScore
+  score: ProvaScore | undefined
   total_questions: number
   questions_answers: { option_id: number; option_letter: string }[]
 }
@@ -33,7 +34,9 @@ type UsersProvaResponse = {
     username: string
     email: string
     uuid: string
+    done: boolean
   }[]
+  totalLinkedUsers: number
 }
 
 type ProvaInfoResponse = {
@@ -48,6 +51,10 @@ type ProvaInfoResponse = {
       username: string
       email: string
     }
+    published: boolean
+    timer: number
+    result: boolean
+    releaseResult?: boolean
   }
 }
 

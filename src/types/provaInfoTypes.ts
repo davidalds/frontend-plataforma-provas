@@ -5,4 +5,5 @@ export type FormProvaInfo = {
   end_date: Date
   total_score: number
   total_question: number
+  timer: number
 }

@@ -16,4 +16,5 @@ export type createProvaForm = {
   initial_date: Date
   end_date: Date
   questions: question[]
+  timer: number
 }

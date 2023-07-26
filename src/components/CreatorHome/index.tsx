@@ -17,12 +17,13 @@ import HeadingHome from 'components/HeadingHome'
 
 interface IPropsCreatorHome {
   data: ProvaResponse | undefined
+  data2: ProvaResponse | undefined
 }
 
-const CreatorHome = ({ data }: IPropsCreatorHome) => {
+const CreatorHome = ({ data, data2 }: IPropsCreatorHome) => {
   return (
     <>
-      <HeadingHome headingText={'Provas criadas'}>
+      <HeadingHome headingText={'Provas publicadas'}>
         <Button
           as={Link}
           colorScheme={'blue'}
@@ -39,9 +40,17 @@ const CreatorHome = ({ data }: IPropsCreatorHome) => {
             <BaseCard
               key={prova_id}
               cardTitle={title}
-              cardButtonLink={`prova/info/${uuid}`}
-              cardButtonTitle={'Visualizar informações'}
-              cardButtonIcon={AiOutlineFileSearch}
+              buttons={
+                <Button
+                  as={Link}
+                  href={`prova/info/${uuid}`}
+                  leftIcon={<Icon as={AiOutlineFileSearch} />}
+                  variant={'outline'}
+                  colorScheme={'blue'}
+                >
+                  Visualizar informações
+                </Button>
+              }
             >
               {description}
             </BaseCard>
@@ -50,7 +59,39 @@ const CreatorHome = ({ data }: IPropsCreatorHome) => {
       ) : (
         <Box p={4}>
           <AlertComponent
-            title={'Você não possui provas criadas'}
+            title={'Você não possui provas publicadas'}
+            statusType="info"
+          />
+        </Box>
+      )}
+      <HeadingHome headingText={'Provas não publicadas'}></HeadingHome>
+      <Divider />
+      {data2 && data2.provas.length > 0 ? (
+        <SimpleGrid p={4} columns={[1, 2, 3]} spacing={'40px'}>
+          {data2?.provas.map(({ prova_id, title, description, uuid }) => (
+            <BaseCard
+              key={prova_id}
+              cardTitle={title}
+              buttons={
+                <Button
+                  as={Link}
+                  href={`prova/info/${uuid}`}
+                  leftIcon={<Icon as={AiOutlineFileSearch} />}
+                  variant={'outline'}
+                  colorScheme={'blue'}
+                >
+                  Visualizar informações
+                </Button>
+              }
+            >
+              {description}
+            </BaseCard>
+          ))}
+        </SimpleGrid>
+      ) : (
+        <Box p={4}>
+          <AlertComponent
+            title={'Você não possui provas não publicadas'}
             statusType="info"
           />
         </Box>

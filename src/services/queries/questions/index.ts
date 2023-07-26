@@ -28,6 +28,7 @@ interface QuestionDataFeedback extends Question {
 type QuestionResponse = {
   prova_id: number
   prova_title: string
+  timer: number
   questions: QuestionData[]
 }
 

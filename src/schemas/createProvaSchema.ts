@@ -18,6 +18,7 @@ export const questionSchema = {
 const schema = Yup.object().shape({
   title: Yup.string().trim().required('Campo obrigatório'),
   description: Yup.string().trim().required('Campo obrigatório'),
+  timer: Yup.string().required('Campo obrigatório'),
   initial_date: Yup.string().required('Campo obrigatório'),
   end_date: Yup.string().required('Campo obrigatório'),
   questions: Yup.array().of(Yup.object(questionSchema)),

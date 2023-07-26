@@ -27,6 +27,8 @@ import HeadingForm from 'components/Form/HeadingForm'
 import api from '../../../services'
 import RequireAuth from '../../../context/RequireAuth'
 import BreadCrumb from 'components/Breadcrumb'
+import timerOpts from '../../../utils/timerOptions'
+import useCatchErrors from '../../../hooks/useCatchErrors'
 
 const arr_options_letter = ['A', 'B', 'C', 'D']
 
@@ -53,6 +55,8 @@ const CreateProva = () => {
     name: 'questions',
     control,
   })
+
+  const { handleErrors } = useCatchErrors()
 
   const { data: session } = useSession()
   const { mutate } = useSWRConfig()
@@ -105,11 +109,7 @@ const CreateProva = () => {
 
       router.replace('/')
     } catch (error) {
-      toast({
-        status: 'error',
-        title: 'Ocorreu um erro ao tentar salvar prova',
-      })
-      console.log(error)
+      handleErrors(error, 'Ocorreu um erro ao tentar salvar prova')
     }
   }
 
@@ -157,9 +157,18 @@ const CreateProva = () => {
                   />
                 </WrapFormInput>
               </WrapInputs>
-              <WrapInputs cols={[2]}>
+              <WrapInputs cols={[1, 2, 3]}>
+                <WrapFormInput errors={errors.timer} label="Tempo de prova">
+                  <Select variant="flushed" {...register('timer')}>
+                    {timerOpts.map(({ label, value }, index) => (
+                      <option value={value} key={index}>
+                        {label}
+                      </option>
+                    ))}
+                  </Select>
+                </WrapFormInput>
                 <WrapFormInput
-                  label={'Data inicial'}
+                  label={'Data abertura'}
                   errors={errors.initial_date}
                 >
                   <Input
@@ -168,7 +177,10 @@ const CreateProva = () => {
                     {...register('initial_date')}
                   />
                 </WrapFormInput>
-                <WrapFormInput label={'Data final'} errors={errors.end_date}>
+                <WrapFormInput
+                  label={'Data fechamento'}
+                  errors={errors.end_date}
+                >
                   <Input
                     type="datetime-local"
                     variant="flushed"
@@ -212,7 +224,7 @@ const CreateProva = () => {
                         <></>
                       )}
                     </HStack>
-                    <WrapInputs cols={[2]}>
+                    <WrapInputs cols={[1, 2]}>
                       <WrapFormInput errors={errors?.questions?.[index]?.title}>
                         <Input
                           type="text"
@@ -231,7 +243,7 @@ const CreateProva = () => {
                       </WrapFormInput>
                     </WrapInputs>
                     {arr_options_letter.map((letter, ind) => (
-                      <WrapInputs cols={[3]} key={ind}>
+                      <WrapInputs cols={[1, 2, 3]} key={ind}>
                         <WrapFormInput label={'Opção'}>
                           <Input
                             type="text"

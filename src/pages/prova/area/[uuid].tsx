@@ -16,14 +16,14 @@ import Layout from 'components/Layout'
 import Question from 'components/Question'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import api from '../../../services'
 import RequireAuth from '../../../context/RequireAuth'
 import { fetcherQuestions } from '../../../services/queries/questions'
-import BreadCrumb from 'components/Breadcrumb'
 import { useToastHook } from '../../../hooks/useToast'
 import ErrorAlertPage from 'components/ErrorAlertPage'
+import useCatchErrors from '../../../hooks/useCatchErrors'
 
 type Options = {
   option_question_id: number
@@ -36,17 +36,46 @@ const ProvaArea = () => {
   const [uuid, setUuid] = useState<string>('')
   const { data, error, isLoading } = useSWR(
     uuid && session ? `questions/${session.user.uuid}/${uuid}` : null,
-    fetcherQuestions
+    fetcherQuestions,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   )
 
   const toast = useToastHook()
 
   const [optionsArr, setOptionsArr] = useState<Options[]>([])
   const [emptyQuestionsIndex, setEmptyQuestionsIndex] = useState<number[]>([])
+  const [mounted, setMounted] = useState(false)
+  const { handleErrors } = useCatchErrors()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const [tabIndex, setTabIndex] = useState<number>(0)
+
+  const markProvaDone = async () => {
+    try {
+      await api.put(`prova/done/${session?.user.uuid}/${uuid}`)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  useEffect(() => {
+    if (!mounted && uuid && session && data) {
+      ;(async () => {
+        try {
+          await markProvaDone()
+        } catch (error) {
+          handleErrors(error, 'Ocorreu um erro ao marcar a abertura da prova')
+          router.replace('/')
+        }
+      })()
+      setMounted(true)
+    }
+  }, [uuid, session, data])
 
   useEffect(() => {
     if (router) {
@@ -97,11 +126,11 @@ const ProvaArea = () => {
         options: optionsArr,
       })
       onClose()
-      router.push('/')
+      router.replace('/')
       toast({ status: 'success', title: 'Prova respondida com sucesso' })
-    } catch (err) {
-      toast({ status: 'error', title: 'Ocorreu um erro ao responder prova' })
-      console.log(err)
+    } catch (error) {
+      onClose()
+      handleErrors(error, 'Ocorreu um erro ao responder prova')
     }
   }
 
@@ -130,9 +159,15 @@ const ProvaArea = () => {
     }
   }
 
+  const forceEndProva = useCallback(() => {
+    if (router) {
+      router.replace('/')
+    }
+  }, [router])
+
   return (
     <RequireAuth>
-      <Layout title="Prova Área">
+      <Layout title="Prova Área" hiddenHeader>
         <ErrorAlertPage
           errorTitle="Ocorreu um erro ao carregar área da prova"
           error={error}
@@ -143,19 +178,11 @@ const ProvaArea = () => {
             questionsEmptyList={emptyQuestionsIndex}
             sendProva={sendProva}
           />
-          <BreadCrumb
-            links={[
-              { path: `/prova/${router.query.uuid}`, pageName: 'Prova' },
-              {
-                path: router.asPath,
-                pageName: 'Área da Prova',
-                isCurrent: true,
-              },
-            ]}
-          />
           <VStack>
             <QuestionHeader
               provaTitle={data?.prova_title || 'Título da prova'}
+              timer={data?.timer}
+              forceEndProva={forceEndProva}
             />
             {isLoading ? (
               <Spinner size={'xl'} />
@@ -228,7 +255,7 @@ const ProvaArea = () => {
                         }
                       >
                         {data?.questions.length === tabIndex + 1
-                          ? 'Finalizar prova'
+                          ? 'Finalizar Prova'
                           : 'Próximo'}
                       </Button>
                     </>

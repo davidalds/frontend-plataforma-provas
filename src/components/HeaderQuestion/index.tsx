@@ -1,7 +1,13 @@
+import React from 'react'
 import { HStack, Text } from '@chakra-ui/react'
 import { IPropsQuestionHeader } from './interfaces/questionHeader'
+import Timer from 'components/Timer'
 
-const QuestionHeader = ({ provaTitle }: IPropsQuestionHeader) => {
+const QuestionHeader = ({
+  provaTitle,
+  timer,
+  forceEndProva,
+}: IPropsQuestionHeader) => {
   return (
     <HStack
       bgColor={'mainBlue.100'}
@@ -13,9 +19,9 @@ const QuestionHeader = ({ provaTitle }: IPropsQuestionHeader) => {
       <Text fontSize={'lg'} fontWeight={'bold'} color={'mainBlue.700'}>
         {provaTitle}
       </Text>
-      <Text>Tempo de prova</Text>
+      {timer && <Timer timer={timer} forceEndProva={forceEndProva} />}
     </HStack>
   )
 }
 
-export default QuestionHeader
+export default React.memo(QuestionHeader)

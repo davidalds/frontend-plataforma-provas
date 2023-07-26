@@ -17,6 +17,7 @@ import ProvaCardInfo from 'components/ProvaCardInfo'
 import BoxStack from 'components/ProvaCardInfo/BoxStack'
 import BreadCrumb from 'components/Breadcrumb'
 import ErrorAlertPage from 'components/ErrorAlertPage'
+import AlertInfoContent from 'components/AlertInfoContent'
 
 const ProvaScore = () => {
   const { data: session } = useSession()
@@ -65,16 +66,33 @@ const ProvaScore = () => {
                   </Button>
                 }
               >
+                {data.score === undefined ? (
+                  <AlertInfoContent>
+                    Não foram encontradas respostas suas na prova. Provavelmente
+                    você ainda não enviou as suas respostas na área de prova, o
+                    tempo de prova expirou ou você abandonou a área de prova sem
+                    finalizar a prova.
+                  </AlertInfoContent>
+                ) : (
+                  <></>
+                )}
+
                 <BoxStack heading={'Valor da prova'}>
                   <Text fontSize="md">{data.prova_score} ponto(s)</Text>
                 </BoxStack>
                 <BoxStack heading={'Questões acertadas'}>
                   <Text fontSize="md">
-                    {data.score.correct_questions} de {data.total_questions}
+                    {data.score?.correct_questions !== undefined
+                      ? data.score.correct_questions
+                      : 0}{' '}
+                    de {data.total_questions}
                   </Text>
                 </BoxStack>
                 <BoxStack heading={'Nota obtida'}>
-                  <Text fontSize="md">{data.score.score} ponto(s)</Text>
+                  <Text fontSize="md">
+                    {data.score?.score !== undefined ? data.score.score : 0}{' '}
+                    ponto(s)
+                  </Text>
                 </BoxStack>
                 <BoxStack heading={'Gabarito da prova'}>
                   <HStack spacing={2}>
