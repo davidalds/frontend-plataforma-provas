@@ -13,11 +13,11 @@ const useCatchErrors = () => {
 
   const handleErrors = (error: unknown, noCatchMessageError?: string) => {
     if (isAxiosError(error)) {
-      if (error.response?.status === 403) {
-        handleToast(error.response.data.errors.msg)
-      } else if (error.response?.status === 404) {
-        handleToast(error.response.data.errors.msg)
-      } else if (error.response?.status === 401) {
+      if (
+        error.response?.status === 403 ||
+        error.response?.status === 404 ||
+        error.response?.status === 401
+      ) {
         handleToast(error.response.data.errors.msg)
       } else {
         handleToast(

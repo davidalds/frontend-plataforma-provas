@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from 'components/Layout'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
@@ -16,6 +16,11 @@ import {
   Text,
   VStack,
   useToast,
+  Tabs,
+  TabPanel,
+  TabList,
+  TabPanels,
+  Tab,
 } from '@chakra-ui/react'
 import { IoIosAdd } from 'react-icons/io'
 import { AiOutlineMinus } from 'react-icons/ai'
@@ -56,6 +61,7 @@ const CreateProva = () => {
     control,
   })
 
+  const [tabIndex, setTabIndex] = useState<number>(0)
   const { handleErrors } = useCatchErrors()
 
   const { data: session } = useSession()
@@ -200,100 +206,134 @@ const CreateProva = () => {
                   Nova questão
                 </Button>
               </HStack>
-              {fields.map((field, index) => (
-                <React.Fragment key={field.id}>
-                  <Stack w={'100%'} direction={'column'}>
-                    <HStack justifyContent={'space-between'}>
-                      <Text
-                        fontSize={'md'}
-                        color={'mainBlue.600'}
-                        fontWeight={'bold'}
+              <Tabs
+                isFitted
+                variant={'soft-rounded'}
+                w={'100%'}
+                index={tabIndex}
+                onChange={(index) => setTabIndex(index)}
+              >
+                <TabList>
+                  {fields.map((_, index) =>
+                    errors.questions?.[index] ||
+                    errors.questions?.[index]?.options ? (
+                      <Tab
+                        key={index}
+                        bg={'salmon'}
+                        color={'white'}
+                        _selected={{ bg: 'salmon', color: 'white' }}
                       >
-                        Questão {index + 1}
-                      </Text>
-                      {index > 0 ? (
-                        <Button
-                          size={'sm'}
-                          color={'mainBlue.600'}
-                          leftIcon={<Icon as={AiOutlineMinus} />}
-                          onClick={() => remove(index)}
-                        >
-                          Remover
-                        </Button>
-                      ) : (
-                        <></>
-                      )}
-                    </HStack>
-                    <WrapInputs cols={[1, 2]}>
-                      <WrapFormInput errors={errors?.questions?.[index]?.title}>
-                        <Input
-                          type="text"
-                          variant="flushed"
-                          placeholder="Título da questão"
-                          {...register(`questions.${index}.title` as const)}
-                        />
-                      </WrapFormInput>
-                      <WrapFormInput errors={errors?.questions?.[index]?.peso}>
-                        <Input
-                          type="number"
-                          variant="flushed"
-                          placeholder="Peso da questão"
-                          {...register(`questions.${index}.peso` as const)}
-                        />
-                      </WrapFormInput>
-                    </WrapInputs>
-                    {arr_options_letter.map((letter, ind) => (
-                      <WrapInputs cols={[1, 2, 3]} key={ind}>
-                        <WrapFormInput label={'Opção'}>
-                          <Input
-                            type="text"
-                            variant="flushed"
-                            {...register(
-                              `questions.${index}.options.${ind}.option_letter` as const
-                            )}
-                            value={letter}
-                            readOnly
-                          />
-                        </WrapFormInput>
-                        <WrapFormInput
-                          label={'Título opção'}
-                          errors={
-                            errors?.questions?.[index]?.options?.[ind]?.title
-                          }
-                        >
-                          <Input
-                            type="text"
-                            variant="flushed"
-                            placeholder="Título opção"
-                            {...register(
-                              `questions.${index}.options.${ind}.title` as const
-                            )}
-                          />
-                        </WrapFormInput>
-                        <WrapFormInput
-                          label={'Tipo de resposta'}
-                          errors={
-                            errors?.questions?.[index]?.options?.[ind]
-                              ?.iscorrect
-                          }
-                        >
-                          <Select
-                            variant="flushed"
-                            {...register(
-                              `questions.${index}.options.${ind}.iscorrect` as const
-                            )}
+                        {index + 1}
+                      </Tab>
+                    ) : (
+                      <Tab key={index}>{index + 1}</Tab>
+                    )
+                  )}
+                </TabList>
+                <TabPanels>
+                  {fields.map((_, index) => (
+                    <TabPanel key={index}>
+                      <Stack w={'100%'} direction={'column'}>
+                        <HStack justifyContent={'space-between'}>
+                          <Text
+                            fontSize={'md'}
+                            color={'mainBlue.600'}
+                            fontWeight={'bold'}
                           >
-                            <option value="">Selecione uma opção</option>
-                            <option value="false">Incorreta</option>
-                            <option value="true">Correta</option>
-                          </Select>
-                        </WrapFormInput>
-                      </WrapInputs>
-                    ))}
-                  </Stack>
-                  <Divider />
-                </React.Fragment>
-              ))}
+                            Questão {index + 1}
+                          </Text>
+                          {index > 0 ? (
+                            <Button
+                              size={'sm'}
+                              color={'mainBlue.600'}
+                              leftIcon={<Icon as={AiOutlineMinus} />}
+                              onClick={() => {
+                                remove(index)
+                                setTabIndex(index - 1)
+                              }}
+                            >
+                              Remover
+                            </Button>
+                          ) : (
+                            <></>
+                          )}
+                        </HStack>
+                        <WrapInputs cols={[1, 2]}>
+                          <WrapFormInput
+                            errors={errors?.questions?.[index]?.title}
+                          >
+                            <Input
+                              type="text"
+                              variant="flushed"
+                              placeholder="Título da questão"
+                              {...register(`questions.${index}.title` as const)}
+                            />
+                          </WrapFormInput>
+                          <WrapFormInput
+                            errors={errors?.questions?.[index]?.peso}
+                          >
+                            <Input
+                              type="number"
+                              variant="flushed"
+                              placeholder="Peso da questão"
+                              {...register(`questions.${index}.peso` as const)}
+                            />
+                          </WrapFormInput>
+                        </WrapInputs>
+                        {arr_options_letter.map((letter, ind) => (
+                          <WrapInputs cols={[1, 2, 3]} key={ind}>
+                            <WrapFormInput label={'Opção'}>
+                              <Input
+                                type="text"
+                                variant="flushed"
+                                {...register(
+                                  `questions.${index}.options.${ind}.option_letter` as const
+                                )}
+                                value={letter}
+                                readOnly
+                              />
+                            </WrapFormInput>
+                            <WrapFormInput
+                              label={'Título opção'}
+                              errors={
+                                errors?.questions?.[index]?.options?.[ind]
+                                  ?.title
+                              }
+                            >
+                              <Input
+                                type="text"
+                                variant="flushed"
+                                placeholder="Título opção"
+                                {...register(
+                                  `questions.${index}.options.${ind}.title` as const
+                                )}
+                              />
+                            </WrapFormInput>
+                            <WrapFormInput
+                              label={'Tipo de resposta'}
+                              errors={
+                                errors?.questions?.[index]?.options?.[ind]
+                                  ?.iscorrect
+                              }
+                            >
+                              <Select
+                                variant="flushed"
+                                {...register(
+                                  `questions.${index}.options.${ind}.iscorrect` as const
+                                )}
+                              >
+                                <option value="">Selecione uma opção</option>
+                                <option value="false">Incorreta</option>
+                                <option value="true">Correta</option>
+                              </Select>
+                            </WrapFormInput>
+                          </WrapInputs>
+                        ))}
+                      </Stack>
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </Tabs>
               <HStack justifyContent={'flex-end'} w={'100%'}>
                 <Button type="submit" colorScheme={'green'}>
                   Cadastrar prova

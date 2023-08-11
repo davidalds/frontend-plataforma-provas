@@ -172,7 +172,13 @@ const ModalQuestions = ({
         return
       }
 
-      await api.put(`questions/${uuidUser}/${uuidProva}`, data)
+      const obj = {
+        questions: data.questions,
+      }
+
+      console.log(obj)
+
+      await api.put(`questions/${uuidUser}/${uuidProva}`, obj)
 
       resetProvaInfo()
       refetchQuestions()
